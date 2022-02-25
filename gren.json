@@ -17,7 +17,7 @@
         "gren-lang/json": "1.0.0 <= v < 2.0.0",
         "gren-lang/time": "1.0.0 <= v < 2.0.0",
         "gren-lang/url": "1.0.0 <= v < 2.0.0",
-        "gren-lang/virtual-dom": "1.0.2 <= v < 2.0.0"
+        "gren-lang/virtual-dom": "1.0.0 <= v < 2.0.0"
     },
     "test-dependencies": {}
 }
