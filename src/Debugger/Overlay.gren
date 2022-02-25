@@ -257,9 +257,9 @@ viewReport isBad report =
 
         Report.VersionChanged old new ->
             [ text <|
-                "This history was created with Elm "
+                "This history was created with Gren "
                     ++ old
-                    ++ ", but you are using Elm "
+                    ++ ", but you are using Gren "
                     ++ new
                     ++ " right now."
             ]

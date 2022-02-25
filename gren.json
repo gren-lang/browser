@@ -1,0 +1,23 @@
+{
+    "type": "package",
+    "name": "gren-lang/browser",
+    "summary": "Run Gren in browsers, with access to browser history for single-page apps (SPAs)",
+    "license": "BSD-3-Clause",
+    "version": "1.0.0",
+    "exposed-modules": [
+        "Browser",
+        "Browser.Dom",
+        "Browser.Events",
+        "Browser.Navigation"
+    ],
+    "gren-version": "0.1.0 <= v < 0.2.0",
+    "dependencies": {
+        "gren-lang/core": "1.0.0 <= v < 2.0.0",
+        "gren-lang/html": "1.0.0 <= v < 2.0.0",
+        "gren-lang/json": "1.0.0 <= v < 2.0.0",
+        "gren-lang/time": "1.0.0 <= v < 2.0.0",
+        "gren-lang/url": "1.0.0 <= v < 2.0.0",
+        "gren-lang/virtual-dom": "1.0.2 <= v < 2.0.0"
+    },
+    "test-dependencies": {}
+}

@@ -1,11 +1,11 @@
 /*
 
-import Elm.Kernel.Debug exposing (crash)
-import Elm.Kernel.Json exposing (run, wrap)
-import Elm.Kernel.Platform exposing (preload)
-import Elm.Kernel.Scheduler exposing (binding, succeed, spawn)
-import Elm.Kernel.Utils exposing (Tuple0)
-import Elm.Kernel.VirtualDom exposing (body)
+import Gren.Kernel.Debug exposing (crash)
+import Gren.Kernel.Json exposing (run, wrap)
+import Gren.Kernel.Platform exposing (preload)
+import Gren.Kernel.Scheduler exposing (binding, succeed, spawn)
+import Gren.Kernel.Utils exposing (Tuple0)
+import Gren.Kernel.VirtualDom exposing (body)
 import Json.Decode as Json exposing (map)
 import Platform.Sub as Sub exposing (none)
 import Result exposing (isOk)

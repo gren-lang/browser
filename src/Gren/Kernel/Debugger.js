@@ -3,14 +3,14 @@
 import Debugger.Expando as Expando exposing (S, Primitive, Sequence, Dictionary, Record, Constructor, ListSeq, SetSeq, ArraySeq)
 import Debugger.Main as Main exposing (getUserModel, wrapInit, wrapUpdate, wrapSubs, cornerView, popoutView, NoOp, UserMsg, Up, Down, toBlockerType, initialWindowWidth, initialWindowHeight)
 import Debugger.Overlay as Overlay exposing (BlockNone, BlockMost)
-import Elm.Kernel.Browser exposing (makeAnimator)
-import Elm.Kernel.Debug exposing (crash)
-import Elm.Kernel.Json exposing (wrap)
-import Elm.Kernel.List exposing (Cons, Nil)
-import Elm.Kernel.Platform exposing (initialize)
-import Elm.Kernel.Scheduler exposing (binding, succeed)
-import Elm.Kernel.Utils exposing (Tuple0, Tuple2, ap)
-import Elm.Kernel.VirtualDom exposing (node, applyPatches, diff, doc, makeStepper, map, render, virtualize, divertHrefToApp)
+import Gren.Kernel.Browser exposing (makeAnimator)
+import Gren.Kernel.Debug exposing (crash)
+import Gren.Kernel.Json exposing (wrap)
+import Gren.Kernel.List exposing (Cons, Nil)
+import Gren.Kernel.Platform exposing (initialize)
+import Gren.Kernel.Scheduler exposing (binding, succeed)
+import Gren.Kernel.Utils exposing (Tuple0, Tuple2, ap)
+import Gren.Kernel.VirtualDom exposing (node, applyPatches, diff, doc, makeStepper, map, render, virtualize, divertHrefToApp)
 import Json.Decode as Json exposing (map)
 import List exposing (map, reverse)
 import Maybe exposing (Just, Nothing)
@@ -189,7 +189,7 @@ function _Debugger_openWindow(popout)
 
 	var debuggerWindow = window.open('', '', 'width=' + w + ',height=' + h + ',left=' + x + ',top=' + y);
 	var doc = debuggerWindow.document;
-	doc.title = 'Elm Debugger';
+	doc.title = 'Gren Debugger';
 
 	// handle arrow keys
 	doc.addEventListener('keydown', function(event) {
@@ -227,7 +227,7 @@ function _Debugger_scroll(popout)
 	{
 		if (popout.__doc)
 		{
-			var msgs = popout.__doc.getElementById('elm-debugger-sidebar');
+			var msgs = popout.__doc.getElementById('gren-debugger-sidebar');
 			if (msgs && msgs.scrollTop !== 0)
 			{
 				msgs.scrollTop = 0;
@@ -359,7 +359,7 @@ function _Debugger_messageToString(value)
 		return '…';
 	}
 
-	if (['Array_elm_builtin', 'Set_elm_builtin', 'RBNode_elm_builtin', 'RBEmpty_elm_builtin'].indexOf(value.$) >= 0)
+	if (['Array_gren_builtin', 'Set_gren_builtin', 'RBNode_gren_builtin', 'RBEmpty_gren_builtin'].indexOf(value.$) >= 0)
 	{
 		return '…';
 	}
@@ -410,21 +410,21 @@ function _Debugger_init(value)
 			);
 		}
 
-		if (tag === 'Set_elm_builtin')
+		if (tag === 'Set_gren_builtin')
 		{
 			return A3(__Expando_Sequence, __Expando_SetSeq, true,
 				A3(__Set_foldr, _Debugger_initCons, __List_Nil, value)
 			);
 		}
 
-		if (tag === 'RBNode_elm_builtin' || tag == 'RBEmpty_elm_builtin')
+		if (tag === 'RBNode_gren_builtin' || tag == 'RBEmpty_gren_builtin')
 		{
 			return A2(__Expando_Dictionary, true,
 				A3(__Dict_foldr, _Debugger_initKeyValueCons, __List_Nil, value)
 			);
 		}
 
-		if (tag === 'Array_elm_builtin')
+		if (tag === 'Array_gren_builtin')
 		{
 			return A3(__Expando_Sequence, __Expando_ArraySeq, true,
 				A3(__Array_foldr, _Debugger_initCons, __List_Nil, value)
@@ -532,7 +532,7 @@ function _Debugger_blocker(event)
 	var isScroll = event.type === 'scroll' || event.type === 'wheel';
 	for (var node = event.target; node; node = node.parentNode)
 	{
-		if (isScroll ? node.id === 'elm-debugger-details' : node.id === 'elm-debugger-overlay')
+		if (isScroll ? node.id === 'gren-debugger-details' : node.id === 'gren-debugger-overlay')
 		{
 			return;
 		}

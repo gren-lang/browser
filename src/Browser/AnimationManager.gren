@@ -3,7 +3,7 @@ effect module Browser.AnimationManager where { subscription = MySub } exposing
     , onAnimationFrameDelta
     )
 
-import Elm.Kernel.Browser
+import Gren.Kernel.Browser
 import Process
 import Task exposing (Task)
 import Time
@@ -106,9 +106,9 @@ onSelfMsg router newTime { subs, oldTime } =
 
 rAF : Task x Int
 rAF =
-    Elm.Kernel.Browser.rAF ()
+    Gren.Kernel.Browser.rAF ()
 
 
 now : Task x Int
 now =
-    Elm.Kernel.Browser.now ()
+    Gren.Kernel.Browser.now ()

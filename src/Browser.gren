@@ -5,7 +5,7 @@ module Browser exposing
     , application, UrlRequest(..)
     )
 
-{-| This module helps you set up an Elm `Program` with functions like
+{-| This module helps you set up an Gren `Program` with functions like
 [`sandbox`](#sandbox) and [`document`](#document).
 
 
@@ -33,7 +33,7 @@ module Browser exposing
 import Browser.Navigation as Navigation
 import Debugger.Main
 import Dict
-import Elm.Kernel.Browser
+import Gren.Kernel.Browser
 import Html exposing (Html)
 import Url
 
@@ -45,19 +45,19 @@ import Url
 {-| Create a “sandboxed” program that cannot communicate with the outside
 world.
 
-This is great for learning the basics of [The Elm Architecture][tea]. You can
+This is great for learning the basics of [The Gren Architecture][tea]. You can
 see sandboxes in action in the following examples:
 
-  - [Buttons](https://guide.elm-lang.org/architecture/buttons.html)
-  - [Text Fields](https://guide.elm-lang.org/architecture/text_fields.html)
-  - [Forms](https://guide.elm-lang.org/architecture/forms.html)
+  - [Buttons](https://guide.gren-lang.org/architecture/buttons.html)
+  - [Text Fields](https://guide.gren-lang.org/architecture/text_fields.html)
+  - [Forms](https://guide.gren-lang.org/architecture/forms.html)
 
 Those are nice, but **I very highly recommend reading [this guide][guide]
-straight through** to really learn how Elm works. Understanding the
+straight through** to really learn how Gren works. Understanding the
 fundamentals actually pays off in this language!
 
-[tea]: https://guide.elm-lang.org/architecture/
-[guide]: https://guide.elm-lang.org/
+[tea]: https://guide.gren-lang.org/architecture/
+[guide]: https://guide.gren-lang.org/
 
 -}
 sandbox :
@@ -67,7 +67,7 @@ sandbox :
     }
     -> Program () model msg
 sandbox impl =
-    Elm.Kernel.Browser.element
+    Gren.Kernel.Browser.element
         { init = \() -> ( impl.init, Cmd.none )
         , view = impl.view
         , update = \msg model -> ( impl.update msg model, Cmd.none )
@@ -79,26 +79,26 @@ sandbox impl =
 -- ELEMENT
 
 
-{-| Create an HTML element managed by Elm. The resulting elements are easy to
-embed in larger JavaScript projects, and lots of companies that use Elm
+{-| Create an HTML element managed by Gren. The resulting elements are easy to
+embed in larger JavaScript projects, and lots of companies that use Gren
 started with this approach! Try it out on something small. If it works, great,
 do more! If not, revert, no big deal.
 
 Unlike a [`sandbox`](#sandbox), an `element` can talk to the outside world in
 a couple ways:
 
-  - `Cmd` &mdash; you can “command” the Elm runtime to do stuff, like HTTP.
+  - `Cmd` &mdash; you can “command” the Gren runtime to do stuff, like HTTP.
   - `Sub` &mdash; you can “subscribe” to event sources, like clock ticks.
-  - `flags` &mdash; JavaScript can pass in data when starting the Elm program
+  - `flags` &mdash; JavaScript can pass in data when starting the Gren program
   - `ports` &mdash; set up a client-server relationship with JavaScript
 
 As you read [the guide][guide] you will run into a bunch of examples of `element`
 in [this section][fx]. You can learn more about flags and ports in [the interop
 section][interop].
 
-[guide]: https://guide.elm-lang.org/
-[fx]: https://guide.elm-lang.org/effects/
-[interop]: https://guide.elm-lang.org/interop/
+[guide]: https://guide.gren-lang.org/
+[fx]: https://guide.gren-lang.org/effects/
+[interop]: https://guide.gren-lang.org/interop/
 
 -}
 element :
@@ -109,14 +109,14 @@ element :
     }
     -> Program flags model msg
 element =
-    Elm.Kernel.Browser.element
+    Gren.Kernel.Browser.element
 
 
 
 -- DOCUMENT
 
 
-{-| Create an HTML document managed by Elm. This expands upon what `element`
+{-| Create an HTML document managed by Gren. This expands upon what `element`
 can do in that `view` now gives you control over the `<title>` and `<body>`.
 -}
 document :
@@ -127,7 +127,7 @@ document :
     }
     -> Program flags model msg
 document =
-    Elm.Kernel.Browser.document
+    Gren.Kernel.Browser.document
 
 
 {-| This data specifies the `<title>` and all of the nodes that should go in
@@ -143,8 +143,8 @@ app shows an accurate date in the title, etc.
 >     of CSS without any CSS files. You can add all the styles you need in your
 >     `view` function, and there is no need to worry about class names matching.
 >
-> 2.  Compile your Elm code to JavaScript with `elm make --output=elm.js` and
->     then make your own HTML file that loads `elm.js` and the CSS file you want.
+> 2.  Compile your Gren code to JavaScript with `gren make --output=gren.js` and
+>     then make your own HTML file that loads `gren.js` and the CSS file you want.
 >     With this approach, it does not matter where the CSS comes from. Write it
 >     by hand. Generate it. Whatever you want to do.
 >
@@ -153,7 +153,7 @@ app shows an accurate date in the title, etc.
 >
 > The bigger point here is that loading assets involves touching the `<head>`
 > as an implementation detail of browsers, but that does not mean it should be
-> the responsibility of the `view` function in Elm. So we do it differently!
+> the responsibility of the `view` function in Gren. So we do it differently!
 
 [elm-css]: /packages/rtfeldman/elm-css/latest/
 
@@ -188,20 +188,20 @@ control over `Url` changes.
 **More Info:** Here are some example usages of `application` programs:
 
   - [RealWorld example app](https://github.com/rtfeldman/elm-spa-example)
-  - [Elm’s package website](https://github.com/elm/package.elm-lang.org)
+  - [Gren’s package website](https://github.com/elm/package.gren-lang.org)
 
-These are quite advanced Elm programs, so be sure to go through [the guide][g]
+These are quite advanced Gren programs, so be sure to go through [the guide][g]
 first to get a solid conceptual foundation before diving in! If you start
 reading a calculus book from page 314, it might seem confusing. Same here!
 
 **Note:** Can an [`element`](#element) manage the URL too? Read [this]!
 
-[g]: https://guide.elm-lang.org/
+[g]: https://guide.gren-lang.org/
 [bn]: Browser-Navigation
 [bnp]: Browser-Navigation#pushUrl
 [bnl]: Browser-Navigation#load
-[url]: /packages/elm/url/latest/Url#Url
-[this]: https://github.com/elm/browser/blob/1.0.2/notes/navigation-in-elements.md
+[url]: /packages/gren-lang/url/latest/Url#Url
+[this]: https://github.com/gren-lang/browser/blob/1.0.2/notes/navigation-in-elements.md
 
 -}
 application :
@@ -214,7 +214,7 @@ application :
     }
     -> Program flags model msg
 application =
-    Elm.Kernel.Browser.application
+    Gren.Kernel.Browser.application
 
 
 {-| All links in an [`application`](#application) create a `UrlRequest`. So
@@ -235,7 +235,7 @@ like:
 All of these links exist under the `https://example.com` domain. An `External`
 link would be like:
 
-  - `https://elm-lang.org/examples`
+  - `https://gren-lang.org/examples`
   - `https://other.example.com/home`
   - `http://example.com/home`
 

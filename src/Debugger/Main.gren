@@ -17,7 +17,7 @@ import Debugger.Metadata as Metadata exposing (Metadata)
 import Debugger.Overlay as Overlay
 import Debugger.Report as Report
 import Dict exposing (Dict)
-import Elm.Kernel.Debugger
+import Gren.Kernel.Debugger
 import Html exposing (..)
 import Html.Attributes as A exposing (..)
 import Html.Events exposing (on, onClick, onInput, onMouseDown, onMouseUp)
@@ -260,7 +260,7 @@ wrapUpdate update msg model =
 
     Open ->
       ( model
-      , Task.perform (always NoOp) (Elm.Kernel.Debugger.open model.popout)
+      , Task.perform (always NoOp) (Gren.Kernel.Debugger.open model.popout)
       )
 
     Up ->
@@ -383,17 +383,17 @@ drag info layout =
 
 scroll : Popout -> Cmd (Msg msg)
 scroll popout =
-  Task.perform (always NoOp) (Elm.Kernel.Debugger.scroll popout)
+  Task.perform (always NoOp) (Gren.Kernel.Debugger.scroll popout)
 
 
 scrollTo : String -> Popout -> Cmd (Msg msg)
 scrollTo id popout =
-  Task.perform (always NoOp) (Elm.Kernel.Debugger.scrollTo id popout)
+  Task.perform (always NoOp) (Gren.Kernel.Debugger.scrollTo id popout)
 
 
 upload : Popout -> Cmd (Msg msg)
 upload popout =
-  Task.perform Upload (Elm.Kernel.Debugger.upload popout)
+  Task.perform Upload (Gren.Kernel.Debugger.upload popout)
 
 
 download : Metadata -> History model msg -> Cmd (Msg msg)
@@ -401,8 +401,8 @@ download metadata history =
   let
     historyLength = History.size history
   in
-  Task.perform (\_ -> NoOp) <| Elm.Kernel.Debugger.download historyLength <|
-    Elm.Kernel.Json.unwrap <|
+  Task.perform (\_ -> NoOp) <| Gren.Kernel.Debugger.download historyLength <|
+    Gren.Kernel.Json.unwrap <|
       Encode.object
         [ ( "metadata", Metadata.encode metadata )
         , ( "history", History.encode history )
@@ -472,7 +472,7 @@ cornerView model =
     , wrap = OverlayMsg
     }
     (isPaused model.state)
-    (Elm.Kernel.Debugger.isOpen model.popout)
+    (Gren.Kernel.Debugger.isOpen model.popout)
     (History.size model.history)
     model.overlay
 

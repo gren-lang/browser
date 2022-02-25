@@ -15,7 +15,7 @@ module Debugger.History exposing
 import Array exposing (Array)
 import Debugger.Expando as Expando exposing (Expando)
 import Debugger.Metadata as Metadata
-import Elm.Kernel.Debugger
+import Gren.Kernel.Debugger
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (onClick)
@@ -39,7 +39,7 @@ maxSnapshotSize =
     -- reduce memory usage.
     --
     -- 31 is selected because 62 messages fills up the height of a 27 inch monitor,
-    -- with the current style, while avoiding a tree representation in Elm arrays.
+    -- with the current style, while avoiding a tree representation in Gren arrays.
     --
     -- Performance and memory use seems good.
     31
@@ -99,7 +99,7 @@ decoder initialModel update =
         addMessage rawMsg ( model, history ) =
             let
                 msg =
-                    jsToElm rawMsg
+                    jsToGren rawMsg
             in
             ( update msg model, add msg model history )
 
@@ -109,10 +109,10 @@ decoder initialModel update =
     Decode.map updateModel (Decode.list Decode.value)
 
 
-jsToElm : Encode.Value -> a
-jsToElm =
-    Elm.Kernel.Json.unwrap
-        >> Elm.Kernel.Debugger.unsafeCoerce
+jsToGren : Encode.Value -> a
+jsToGren =
+    Gren.Kernel.Json.unwrap
+        >> Gren.Kernel.Debugger.unsafeCoerce
 
 
 encode : History model msg -> Encode.Value
@@ -127,8 +127,8 @@ encodeHelp snapshot allMessages =
 
 elmToJs : a -> Encode.Value
 elmToJs =
-    Elm.Kernel.Json.wrap
-        >> Elm.Kernel.Debugger.unsafeCoerce
+    Gren.Kernel.Json.wrap
+        >> Gren.Kernel.Debugger.unsafeCoerce
 
 
 
@@ -363,7 +363,7 @@ viewMessage currentIndex index msg =
                 "elm-debugger-entry"
 
         messageName =
-            Elm.Kernel.Debugger.messageToString msg
+            Gren.Kernel.Debugger.messageToString msg
     in
     div
         [ id (idForMessageIndex index)

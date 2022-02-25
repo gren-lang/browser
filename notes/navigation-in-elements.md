@@ -1,8 +1,8 @@
 # How do I manage URL from a `Browser.element`?
 
-Many companies introduce Elm gradually. They use `Browser.element` to embed Elm in a larger codebase as a low-risk way to see if Elm is helpful. If so, great, do more! If not, just revert, no big deal.
+Many companies introduce Gren gradually. They use `Browser.element` to embed Gren in a larger codebase as a low-risk way to see if Gren is helpful. If so, great, do more! If not, just revert, no big deal.
 
-But at some companies the element has grown to manage _almost_ the whole page. Everything except the header and footer, which are produced by the server. And at that time, you may want Elm to start managing URL changes, showing different things in different cases. Well, `Browser.application` lets you do that in Elm, but maybe you have a bunch of legacy code that still needs the header and footer to be created on the server, so `Browser.element` is the only option.
+But at some companies the element has grown to manage _almost_ the whole page. Everything except the header and footer, which are produced by the server. And at that time, you may want Gren to start managing URL changes, showing different things in different cases. Well, `Browser.application` lets you do that in Gren, but maybe you have a bunch of legacy code that still needs the header and footer to be created on the server, so `Browser.element` is the only option.
 
 What do you do?
 
@@ -12,10 +12,10 @@ What do you do?
 You would initialize your element like this:
 
 ```javascript
-// Initialize your Elm program
-var app = Elm.Main.init({
+// Initialize your Gren program
+var app = Gren.Main.init({
     flags: location.href,
-    node: document.getElementById('elm-main')
+    node: document.getElementById('gren-main')
 });
 
 // Inform app of browser navigation (the BACK and FORWARD buttons)
@@ -33,9 +33,9 @@ app.ports.pushUrl.subscribe(function(url) {
 Now the important thing is that you can handle other things in these two event listeners. Maybe your header is sensitive to the URL as well? This is where you manage
 anything like that.
 
-From there, your Elm code would look something like this:
+From there, your Gren code would look something like this:
 
-```elm
+```gren
 import Browser
 import Html exposing (..)
 import Html.Attributes exposing (..)
@@ -101,30 +101,30 @@ The justification is that (1) this will lead to more reliable programs overall a
 
 ### Reliability
 
-There are some Elm users that have many different technologies embedded in the same document. So imagine we have a header in React, charts in Elm, and a data entry interface in Angular.
+There are some Gren users that have many different technologies embedded in the same document. So imagine we have a header in React, charts in Gren, and a data entry interface in Angular.
 
-For URL management to work here, all three of these things need to agree on what page they are on. So the most reliable design is to have one `popstate` listener on the very outside. It would tell React, Elm, and Angular what to do. This gives you a guarantee that they are all in agreement about the current page. Similarly, they would all send messages out requesting a `pushState` such that everyone is informed of any changes.
+For URL management to work here, all three of these things need to agree on what page they are on. So the most reliable design is to have one `popstate` listener on the very outside. It would tell React, Gren, and Angular what to do. This gives you a guarantee that they are all in agreement about the current page. Similarly, they would all send messages out requesting a `pushState` such that everyone is informed of any changes.
 
-If each project was reacting to the URL internally, synchronization bugs would inevitably arise. Maybe it was a static page, but it upgraded to have the URL change. You added that to your Elm, but what about the Angular and React elements. What happens to them? Probably people forget and it is just a confusing bug. So having one `popstate` makes it obvious that there is a decision to make here. And what happens when React starts producing URLs that Angular and Elm have never heard of? Do those elements show some sort of 404 page?
+If each project was reacting to the URL internally, synchronization bugs would inevitably arise. Maybe it was a static page, but it upgraded to have the URL change. You added that to your Gren, but what about the Angular and React elements. What happens to them? Probably people forget and it is just a confusing bug. So having one `popstate` makes it obvious that there is a decision to make here. And what happens when React starts producing URLs that Angular and Gren have never heard of? Do those elements show some sort of 404 page?
 
-> **Note:** If you wanted you could send the `location.href` into a `Platform.worker` to do the URL parsing in Elm. Once you have nice data, you could send it out a port for all the different elements on your page.
+> **Note:** If you wanted you could send the `location.href` into a `Platform.worker` to do the URL parsing in Gren. Once you have nice data, you could send it out a port for all the different elements on your page.
 
 
 ### Lines of Code
 
-So the decision is primarily motivated by the fact that **URL management should happen at the highest possible level for reliability**, but what if Elm is the only thing on screen? How many lines extra are those people paying?
+So the decision is primarily motivated by the fact that **URL management should happen at the highest possible level for reliability**, but what if Gren is the only thing on screen? How many lines extra are those people paying?
 
 Well, the JavaScript code would be something like this:
 
 ```javascript
-var app = Elm.Main.init({
+var app = Gren.Main.init({
     flags: ...
 });
 ```
 
-And in Elm:
+And in Gren:
 
-```elm
+```gren
 import Browser
 import Browser.Navigation as Nav
 import Url
@@ -181,8 +181,8 @@ So we are talking about maybe twenty lines of code that go away in the `applicat
 
 ### Summary
 
-It seems appealing to &ldquo;just do the same thing&rdquo; in `Browser.element` as in `Browser.application`, but you quickly run into corner cases when you consider the broad range of people and companies using Elm. When Elm and React are on the same page, who owns the URL? When `history.pushState` is called in React, how does Elm hear about it? When `pushUrl` is called in Elm, how does React hear about it? It does not appear that there actually _is_ a simpler or shorter way for `Browser.element` to handle these questions. Special hooks on the JS side? And what about the folks using `Browser.element` who are not messing with the URL?
+It seems appealing to &ldquo;just do the same thing&rdquo; in `Browser.element` as in `Browser.application`, but you quickly run into corner cases when you consider the broad range of people and companies using Gren. When Gren and React are on the same page, who owns the URL? When `history.pushState` is called in React, how does Gren hear about it? When `pushUrl` is called in Gren, how does React hear about it? It does not appear that there actually _is_ a simpler or shorter way for `Browser.element` to handle these questions. Special hooks on the JS side? And what about the folks using `Browser.element` who are not messing with the URL?
 
-By keeping it super simple (1) your attention is drawn to the fact that there are actually tricky situations to consider, (2) you have the flexibility to handle any situation that comes up, and (3) folks who are _not_ managing the URL from embedded Elm (the vast majority!) get a `Browser.element` with no extra details.
+By keeping it super simple (1) your attention is drawn to the fact that there are actually tricky situations to consider, (2) you have the flexibility to handle any situation that comes up, and (3) folks who are _not_ managing the URL from embedded Gren (the vast majority!) get a `Browser.element` with no extra details.
 
 The current design seems to balance all these competing concerns in a nice way, even if it may seem like one _particular_ scenario could be a bit better.

@@ -1,0 +1,24 @@
+{
+    "type": "application",
+    "source-directories": [
+        "src"
+    ],
+    "gren-version": "0.1.0",
+    "dependencies": {
+        "direct": {
+            "gren-lang/browser": "1.0.0",
+            "gren-lang/core": "1.0.0",
+            "gren-lang/html": "1.0.0",
+            "gren-lang/json": "1.0.0"
+        },
+        "indirect": {
+            "gren/time": "1.0.0",
+            "gren/url": "1.0.0",
+            "gren/virtual-dom": "1.0.0"
+        }
+    },
+    "test-dependencies": {
+        "direct": {},
+        "indirect": {}
+    }
+}

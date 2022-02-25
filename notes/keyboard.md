@@ -17,7 +17,7 @@ According to [the docs][ke], everything else is deprecated. So `charCode`, `keyC
 
 The simplest approach is to just decode the string value:
 
-```elm
+```gren
 import Json.Decode as Decode
 
 keyDecoder : Decode.Decoder String
@@ -32,7 +32,7 @@ Depending on your scenario, you may want something more elaborate though!
 
 If you are handling user input, maybe you want to distinguish actual characters from all the different [key values](https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/key/Key_Values) that may be produced for non-character keys. This way pressing `h` then `i` then `Backspace` does not turn into `"hiBackspace"`. You could do this:
 
-```elm
+```gren
 import Json.Decode as Decode
 
 type Key
@@ -60,7 +60,7 @@ toKey string =
 
 Or maybe you want to handle left and right arrows specially for a game or a presentation viewer. You could do something like this:
 
-```elm
+```gren
 import Json.Decode as Decode
 
 type Direction

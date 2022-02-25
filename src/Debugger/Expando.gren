@@ -9,7 +9,7 @@ module Debugger.Expando exposing
 
 
 import Dict exposing (Dict)
-import Elm.Kernel.Debugger
+import Gren.Kernel.Debugger
 import Html exposing (Html, div, span, text)
 import Html.Attributes exposing (class, style)
 import Html.Events exposing (onClick)
@@ -54,7 +54,7 @@ seqTypeToString n seqType =
 
 init : a -> Expando
 init value =
-  initHelp True (Elm.Kernel.Debugger.init value)
+  initHelp True (Gren.Kernel.Debugger.init value)
 
 
 initHelp : Bool -> Expando -> Expando
@@ -113,7 +113,7 @@ initHelp isOuter expando =
 
 merge : a -> Expando -> Expando
 merge value expando =
-  mergeHelp expando (Elm.Kernel.Debugger.init value)
+  mergeHelp expando (Gren.Kernel.Debugger.init value)
 
 
 mergeHelp : Expando -> Expando -> Expando

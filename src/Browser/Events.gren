@@ -12,7 +12,7 @@ listeners on those objects for the following topics: [animation](#animation),
 
 If there is something else you need, use [ports] to do it in JavaScript!
 
-[ports]: https://guide.elm-lang.org/interop/ports.html
+[ports]: https://guide.gren-lang.org/interop/ports.html
 
 
 # Animation
@@ -38,7 +38,7 @@ If there is something else you need, use [ports] to do it in JavaScript!
 
 import Browser.AnimationManager as AM
 import Dict
-import Elm.Kernel.Browser
+import Gren.Kernel.Browser
 import Json.Decode as Decode
 import Process
 import Task exposing (Task)
@@ -50,7 +50,7 @@ import Time
 
 
 {-| An animation frame triggers about 60 times per second. Get the POSIX time
-on each frame. (See [`elm/time`](/packages/elm/time/latest) for more info on
+on each frame. (See [`gren-lang/time`](/packages/gren-lang/time/latest) for more info on
 POSIX times.)
 
 **Note:** Browsers have their own render loop, repainting things as fast as
@@ -83,7 +83,7 @@ not rely on this for arrow keys.
 **Note:** Check out [this advice][note] to learn more about decoding key codes.
 It is more complicated than it should be.
 
-[note]: https://github.com/elm/browser/blob/1.0.2/notes/keyboard.md
+[note]: https://github.com/gren-lang/browser/blob/1.0.2/notes/keyboard.md
 
 -}
 onKeyPress : Decode.Decoder msg -> Sub msg
@@ -98,7 +98,7 @@ or `d` at any given time.
 **Note:** Check out [this advice][note] to learn more about decoding key codes.
 It is more complicated than it should be.
 
-[note]: https://github.com/elm/browser/blob/1.0.2/notes/keyboard.md
+[note]: https://github.com/gren-lang/browser/blob/1.0.2/notes/keyboard.md
 
 -}
 onKeyDown : Decode.Decoder msg -> Sub msg
@@ -146,10 +146,10 @@ onClick =
 
 {-| Subscribe to mouse moves anywhere on screen.
 
-You could use this to implement resizable panels like in Elm's online code
+You could use this to implement resizable panels like in Gren's online code
 editor. Check out the example imprementation [here][drag].
 
-[drag]: https://github.com/elm/browser/blob/1.0.2/examples/src/Drag.elm
+[drag]: https://github.com/gren-lang/browser/blob/1.0.2/examples/src/Drag.gren
 
 **Note:** Unsubscribe if you do not need these events! Running code on every
 single mouse movement can be very costly, and it is recommended to only
@@ -222,7 +222,7 @@ different tab or window. When the user looks away, you may want to:
 onVisibilityChange : (Visibility -> msg) -> Sub msg
 onVisibilityChange func =
   let
-    info = Elm.Kernel.Browser.visibilityInfo ()
+    info = Gren.Kernel.Browser.visibilityInfo ()
   in
   on Document info.change <|
     Decode.map (withHidden func) <|
@@ -291,7 +291,7 @@ onSelfMsg router { key, event } state =
   let
     toMessage ( subKey, MySub node name decoder ) =
       if subKey == key then
-        Elm.Kernel.Browser.decodeEvent decoder event
+        Gren.Kernel.Browser.decodeEvent decoder event
       else
         Nothing
 
@@ -348,9 +348,9 @@ spawn router key (MySub node name _) =
   let
     actualNode =
       case node of
-        Document -> Elm.Kernel.Browser.doc
-        Window -> Elm.Kernel.Browser.window
+        Document -> Gren.Kernel.Browser.doc
+        Window -> Gren.Kernel.Browser.window
   in
   Task.map (\value -> ( key, value )) <|
-    Elm.Kernel.Browser.on actualNode name <|
+    Gren.Kernel.Browser.on actualNode name <|
       \event -> Platform.sendToSelf router (Event key event)
