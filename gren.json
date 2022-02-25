@@ -1,7 +1,7 @@
 {
     "type": "package",
     "name": "gren-lang/browser",
-    "summary": "Run Gren in browsers, with access to browser history for single-page apps (SPAs)",
+    "summary": "Run Gren in browsers",
     "license": "BSD-3-Clause",
     "version": "1.0.0",
     "exposed-modules": [
