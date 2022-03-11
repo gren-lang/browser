@@ -6,7 +6,6 @@ import Browser.Dom as Dom exposing (NotFound)
 import Gren.Kernel.Debug exposing (crash)
 import Gren.Kernel.Debugger exposing (element, document)
 import Gren.Kernel.Json exposing (runHelp)
-import Gren.Kernel.List exposing (Nil)
 import Gren.Kernel.Platform exposing (initialize)
 import Gren.Kernel.Scheduler exposing (binding, fail, rawSpawn, succeed, spawn)
 import Gren.Kernel.Utils exposing (Tuple0, Tuple2)
@@ -80,7 +79,7 @@ var _Browser_document = __Debugger_document || F4(function(impl, flagDecoder, de
 			{
 				__VirtualDom_divertHrefToApp = divertHrefToApp;
 				var doc = view(model);
-				var nextNode = __VirtualDom_node('body')(__List_Nil)(doc.__$body);
+				var nextNode = __VirtualDom_node('body')([])(doc.__$body);
 				var patches = __VirtualDom_diff(currNode, nextNode);
 				bodyNode = __VirtualDom_applyPatches(bodyNode, currNode, patches, sendToApp);
 				currNode = nextNode;

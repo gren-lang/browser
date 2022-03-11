@@ -1,18 +1,17 @@
 /*
 
-import Debugger.Expando as Expando exposing (S, Primitive, Sequence, Dictionary, Record, Constructor, ListSeq, SetSeq, ArraySeq)
+import Debugger.Expando as Expando exposing (S, Primitive, Sequence, Dictionary, Record, Constructor, SetSeq, ArraySeq)
 import Debugger.Main as Main exposing (getUserModel, wrapInit, wrapUpdate, wrapSubs, cornerView, popoutView, NoOp, UserMsg, Up, Down, toBlockerType, initialWindowWidth, initialWindowHeight)
 import Debugger.Overlay as Overlay exposing (BlockNone, BlockMost)
 import Gren.Kernel.Browser exposing (makeAnimator)
 import Gren.Kernel.Debug exposing (crash)
 import Gren.Kernel.Json exposing (wrap)
-import Gren.Kernel.List exposing (Cons, Nil)
 import Gren.Kernel.Platform exposing (initialize)
 import Gren.Kernel.Scheduler exposing (binding, succeed)
 import Gren.Kernel.Utils exposing (Tuple0, Tuple2, ap)
 import Gren.Kernel.VirtualDom exposing (node, applyPatches, diff, doc, makeStepper, map, render, virtualize, divertHrefToApp)
 import Json.Decode as Json exposing (map)
-import List exposing (map, reverse)
+import Array exposing (map, reverse)
 import Maybe exposing (Just, Nothing)
 import Set exposing (foldr)
 import Dict exposing (foldr, empty, insert)
@@ -123,10 +122,10 @@ var _Debugger_document = F4(function(impl, flagDecoder, debugMetadata, args)
 			{
 				__VirtualDom_divertHrefToApp = divertHrefToApp;
 				var doc = view(__Main_getUserModel(model));
-				var nextNode = __VirtualDom_node('body')(__List_Nil)(
+				var nextNode = __VirtualDom_node('body')([])(
 					__Utils_ap(
-						A2(__List_map, __VirtualDom_map(__Main_UserMsg), doc.__$body),
-						__List_Cons(__Main_cornerView(model), __List_Nil)
+						A2(__Array_map, __VirtualDom_map(__Main_UserMsg), doc.__$body),
+						[__Main_cornerView(model)])
 					)
 				);
 				var patches = __VirtualDom_diff(currNode, nextNode);
@@ -381,7 +380,7 @@ function _Debugger_init(value)
 {
 	if (typeof value === 'boolean')
 	{
-		return A3(__Expando_Constructor, __Maybe_Just(value ? 'True' : 'False'), true, __List_Nil);
+		return A3(__Expando_Constructor, __Maybe_Just(value ? 'True' : 'False'), true, []);
 	}
 
 	if (typeof value === 'number')
@@ -405,29 +404,22 @@ function _Debugger_init(value)
 
 		if (tag === '::' || tag === '[]')
 		{
-			return A3(__Expando_Sequence, __Expando_ListSeq, true,
-				A2(__List_map, _Debugger_init, value)
+			return A3(__Expando_Sequence, __Expando_ArraySeq, true,
+				A2(__Array_map, _Debugger_init, value)
 			);
 		}
 
 		if (tag === 'Set_gren_builtin')
 		{
 			return A3(__Expando_Sequence, __Expando_SetSeq, true,
-				A3(__Set_foldr, _Debugger_initCons, __List_Nil, value)
+				A3(__Set_foldr, _Debugger_initCons, [], value)
 			);
 		}
 
 		if (tag === 'RBNode_gren_builtin' || tag == 'RBEmpty_gren_builtin')
 		{
 			return A2(__Expando_Dictionary, true,
-				A3(__Dict_foldr, _Debugger_initKeyValueCons, __List_Nil, value)
-			);
-		}
-
-		if (tag === 'Array_gren_builtin')
-		{
-			return A3(__Expando_Sequence, __Expando_ArraySeq, true,
-				A3(__Array_foldr, _Debugger_initCons, __List_Nil, value)
+				A3(__Dict_foldr, _Debugger_initKeyValueCons, [], value)
 			);
 		}
 
@@ -439,13 +431,13 @@ function _Debugger_init(value)
 		var char = tag.charCodeAt(0);
 		if (char === 35 || 65 <= char && char <= 90)
 		{
-			var list = __List_Nil;
+			var list = [];
 			for (var i in value)
 			{
 				if (i === '$') continue;
-				list = __List_Cons(_Debugger_init(value[i]), list);
+				list = [_Debugger_init(value[i])].concat(list);
 			}
-			return A3(__Expando_Constructor, char === 35 ? __Maybe_Nothing : __Maybe_Just(tag), true, __List_reverse(list));
+			return A3(__Expando_Constructor, char === 35 ? __Maybe_Nothing : __Maybe_Just(tag), true, __Array_reverse(list));
 		}
 
 		return __Expando_Primitive('<internals>');
@@ -466,15 +458,12 @@ function _Debugger_init(value)
 
 var _Debugger_initCons = F2(function initConsHelp(value, list)
 {
-	return __List_Cons(_Debugger_init(value), list);
+	return [_Debugger_init(value)].concat(list);
 });
 
 var _Debugger_initKeyValueCons = F3(function(key, value, list)
 {
-	return __List_Cons(
-		__Utils_Tuple2(_Debugger_init(key), _Debugger_init(value)),
-		list
-	);
+	return [__Utils_Tuple2(_Debugger_init(key), _Debugger_init(value))].concat(list);
 });
 
 function _Debugger_addSlashes(str, isChar)
