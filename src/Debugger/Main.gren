@@ -526,7 +526,7 @@ toFlexDirection layout =
 -- DRAG LISTENERS
 
 
-toDragListeners : Layout -> List (Attribute (Msg msg))
+toDragListeners : Layout -> Array (Attribute (Msg msg))
 toDragListeners layout =
   case getDragStatus layout of
     Static -> []

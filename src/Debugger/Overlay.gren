@@ -203,7 +203,7 @@ view config isPaused isOpen numMsgs state =
 -- VIEW MESSAGE
 
 
-viewMessage : Config msg -> String -> List (Html msg) -> Buttons -> Html msg
+viewMessage : Config msg -> String -> Array (Html msg) -> Buttons -> Html msg
 viewMessage config title details buttons =
     div
         [ id "elm-debugger-overlay"
@@ -248,7 +248,7 @@ viewMessage config title details buttons =
         ]
 
 
-viewReport : Bool -> Report -> List (Html msg)
+viewReport : Bool -> Report -> Array (Html msg)
 viewReport isBad report =
     case report of
         Report.CorruptHistory ->
@@ -288,7 +288,7 @@ viewReport isBad report =
                 [ style "list-style-type" "none"
                 , style "padding-left" "20px"
                 ]
-                (List.map viewChange changes)
+                (Array.map viewChange changes)
             ]
 
 
@@ -339,28 +339,28 @@ viewChange change =
                 ]
 
 
-viewMention : List String -> String -> Html msg
+viewMention : Array String -> String -> Html msg
 viewMention tags verbed =
-    case List.map viewCode (List.reverse tags) of
-        [] ->
+    case Array.popFirst (Array.map viewCode (Array.reverse tags)) of
+        Nothing ->
             text ""
 
-        [ tag ] ->
+        Just (tag, []) ->
             li []
                 [ text verbed, tag, text "." ]
 
-        [ tag2, tag1 ] ->
+        Just (tag2, [tag1]) ->
             li []
                 [ text verbed, tag1, text " and ", tag2, text "." ]
 
-        lastTag :: otherTags ->
+        Just (lastTag, otherTags) ->
             li [] <|
-                text verbed
-                    :: List.intersperse (text ", ") (List.reverse otherTags)
+                [text verbed]
+                    ++ Array.intersperse (text ", ") (Array.reverse otherTags)
                     ++ [ text ", and ", lastTag, text "." ]
 
 
-viewBadMetadata : Metadata.Error -> List (Html msg)
+viewBadMetadata : Metadata.Error -> Array (Html msg)
 viewBadMetadata {message, problems} =
   [ p []
       [ text "The "
@@ -368,7 +368,7 @@ viewBadMetadata {message, problems} =
       , text " type of your program cannot be reliably serialized for history files."
       ]
   , p [] [ text "Functions cannot be serialized, nor can values that contain functions. This is a problem in these places:" ]
-  , ul [] (List.map viewProblemType problems)
+  , ul [] (Array.map viewProblemType problems)
   , p []
       [ text goodNews1
       , a [ href "https://guide.elm-lang.org/types/custom_types.html" ] [ text "custom types" ]
@@ -396,7 +396,7 @@ viewProblemType : Metadata.ProblemType -> Html msg
 viewProblemType { name, problems } =
   li []
     [ viewCode name
-    , text (" can contain " ++ addCommas (List.map problemToString problems) ++ ".")
+    , text (" can contain " ++ addCommas (Array.map problemToString problems) ++ ".")
     ]
 
 
@@ -413,19 +413,19 @@ problemToString problem =
     Metadata.VirtualDom -> "virtual DOM values"
 
 
-addCommas : List String -> String
+addCommas : Array String -> String
 addCommas items =
-  case items of
-    [] ->
+  case Array.popFirst items of
+    Nothing ->
       ""
 
-    [item] ->
+    Just (item, []) ->
       item
 
-    [item1,item2] ->
+    Just (item1, [item2]) ->
       item1 ++ " and " ++ item2
 
-    lastItem :: otherItems ->
+    Just (lastItem, otherItems) ->
       String.join ", " (otherItems ++ [ " and " ++ lastItem ])
 
 

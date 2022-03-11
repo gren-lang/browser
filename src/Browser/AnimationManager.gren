@@ -47,7 +47,7 @@ subMap func sub =
 
 
 type alias State msg =
-    { subs : List (MySub msg)
+    { subs : Array (MySub msg)
     , request : Maybe Process.Id
     , oldTime : Int
     }
@@ -63,7 +63,7 @@ init =
     Task.succeed (State [] Nothing 0)
 
 
-onEffects : Platform.Router msg Int -> List (MySub msg) -> State msg -> Task Never (State msg)
+onEffects : Platform.Router msg Int -> Array (MySub msg) -> State msg -> Task Never (State msg)
 onEffects router subs { request, oldTime } =
     case ( request, subs ) of
         ( Nothing, [] ) ->
@@ -99,7 +99,7 @@ onSelfMsg router newTime { subs, oldTime } =
     Process.spawn (Task.andThen (Platform.sendToSelf router) rAF)
         |> Task.andThen
             (\pid ->
-                Task.sequence (List.map send subs)
+                Task.sequence (Array.map send subs)
                     |> Task.andThen (\_ -> Task.succeed (State subs (Just pid) newTime))
             )
 

@@ -58,7 +58,7 @@ type alias History model msg =
 
 type alias RecentHistory model msg =
     { model : model
-    , messages : List msg
+    , messages : Array msg
     , numMessages : Int
     }
 
@@ -104,9 +104,9 @@ decoder initialModel update =
             ( update msg model, add msg model history )
 
         updateModel rawMsgs =
-            List.foldl addMessage ( initialModel, empty initialModel ) rawMsgs
+            Array.foldl addMessage ( initialModel, empty initialModel ) rawMsgs
     in
-    Decode.map updateModel (Decode.list Decode.value)
+    Decode.map updateModel (Decode.array Decode.value)
 
 
 jsToGren : Encode.Value -> a
@@ -117,12 +117,12 @@ jsToGren =
 
 encode : History model msg -> Encode.Value
 encode { snapshots, recent } =
-    Encode.list elmToJs <| Array.foldr encodeHelp (List.reverse recent.messages) snapshots
+    Encode.array elmToJs <| Array.foldr encodeHelp (Array.reverse recent.messages) snapshots
 
 
-encodeHelp : Snapshot model msg -> List msg -> List msg
+encodeHelp : Snapshot model msg -> Array msg -> Array msg
 encodeHelp snapshot allMessages =
-    Array.foldl (::) allMessages snapshot.messages
+    Array.foldl (Array.pushFront) allMessages snapshot.messages
 
 
 elmToJs : a -> Encode.Value
@@ -139,7 +139,7 @@ add : msg -> model -> History model msg -> History model msg
 add msg model { snapshots, recent, numMessages } =
     case addRecent msg model recent of
         ( Just snapshot, newRecent ) ->
-            History (Array.push snapshot snapshots) newRecent (numMessages + 1)
+            History (Array.pushBack snapshot snapshots) newRecent (numMessages + 1)
 
         ( Nothing, newRecent ) ->
             History snapshots newRecent (numMessages + 1)
@@ -152,13 +152,13 @@ addRecent :
     -> ( Maybe (Snapshot model msg), RecentHistory model msg )
 addRecent msg newModel { model, messages, numMessages } =
     if numMessages == maxSnapshotSize then
-        ( Just (Snapshot model (Array.fromList messages))
+        ( Just (Snapshot model messages)
         , RecentHistory newModel [ msg ] 1
         )
 
     else
         ( Nothing
-        , RecentHistory model (msg :: messages) (numMessages + 1)
+        , RecentHistory model (Array.pushFront msg messages) (numMessages + 1)
         )
 
 
@@ -177,7 +177,7 @@ get update index history =
     in
     if index >= snapshotMax then
         undone <|
-            List.foldr (getHelp update) (Stepping (index - snapshotMax) recent.model) recent.messages
+            Array.foldr (getHelp update) (Stepping (index - snapshotMax) recent.model) recent.messages
 
     else
         case Array.get (index // maxSnapshotSize) history.snapshots of
@@ -192,12 +192,12 @@ get update index history =
 
 getRecentMsg : History model msg -> msg
 getRecentMsg history =
-    case history.recent.messages of
-        [] ->
+    case Array.get 0 history.recent.messages of
+        Nothing ->
             -- Debug.crash "Cannot provide most recent message!"
             getRecentMsg history
 
-        first :: _ ->
+        Just first ->
             first
 
 
@@ -255,7 +255,7 @@ view maybeIndex { snapshots, recent, numMessages } =
 
         newStuff =
             recent.messages
-                |> List.foldr (consMsg index) ( recentMessageStartIndex, [] )
+                |> Array.foldr (consMsg index) ( recentMessageStartIndex, [] )
                 |> Tuple.second
                 |> Html.Keyed.node "div" []
     in
@@ -265,15 +265,15 @@ view maybeIndex { snapshots, recent, numMessages } =
         , style "overflow-y" "auto"
         , style "height" "calc(100% - 72px)"
         ]
-        (styles
-            :: newStuff
-            :: oldStuff
-            :: (if onlyRenderRecentMessages then
-                    []
+        ([styles
+         , newStuff
+         , oldStuff
+         ] ++ (if onlyRenderRecentMessages then
+                   []
 
-                else
-                    [ showMoreButton numMessages ]
-               )
+               else
+                   [ showMoreButton numMessages ]
+              )
         )
 
 
@@ -303,12 +303,11 @@ viewRecentSnapshots selectedIndex recentMessagesNum snapshots =
         snapshotsToRender =
             case ( Array.get (arrayLength - 2) snapshots, Array.get (arrayLength - 1) snapshots ) of
                 ( Just fillerSnapshot, Just recentSnapshot ) ->
-                    Array.fromList
-                        [ { model = fillerSnapshot.model
-                          , messages = Array.slice 0 messagesToFill fillerSnapshot.messages
-                          }
-                        , recentSnapshot
-                        ]
+                    [ { model = fillerSnapshot.model
+                      , messages = Array.slice 0 messagesToFill fillerSnapshot.messages
+                      }
+                    , recentSnapshot
+                    ]
 
                 _ ->
                     snapshots
@@ -316,7 +315,7 @@ viewRecentSnapshots selectedIndex recentMessagesNum snapshots =
     viewAllSnapshots selectedIndex startingIndex snapshotsToRender
 
 
-consSnapshot : Int -> Snapshot model msg -> ( Int, List (Html Int) ) -> ( Int, List (Html Int) )
+consSnapshot : Int -> Snapshot model msg -> ( Int, Array (Html Int) ) -> ( Int, Array (Html Int) )
 consSnapshot selectedIndex snapshot ( index, rest ) =
     let
         nextIndex =
@@ -330,7 +329,7 @@ consSnapshot selectedIndex snapshot ( index, rest ) =
                 -1
     in
     ( nextIndex
-    , lazy3 viewSnapshot selectedIndexHelp index snapshot :: rest
+    , Array.pushFront (lazy3 viewSnapshot selectedIndexHelp index snapshot) rest
     )
 
 
@@ -345,10 +344,10 @@ viewSnapshot selectedIndex index { messages } =
 -- VIEW MESSAGE
 
 
-consMsg : Int -> msg -> ( Int, List ( String, Html Int ) ) -> ( Int, List ( String, Html Int ) )
+consMsg : Int -> msg -> ( Int, Array ( String, Html Int ) ) -> ( Int, Array ( String, Html Int ) )
 consMsg currentIndex msg ( index, rest ) =
     ( index + 1
-    , ( String.fromInt index, lazy3 viewMessage currentIndex index msg ) :: rest
+    , Array.pushFront ( String.fromInt index, lazy3 viewMessage currentIndex index msg ) rest
     )
 
 

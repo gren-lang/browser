@@ -160,7 +160,7 @@ app shows an accurate date in the title, etc.
 -}
 type alias Document msg =
     { title : String
-    , body : List (Html msg)
+    , body : Array (Html msg)
     }
 
 

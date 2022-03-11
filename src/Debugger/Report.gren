@@ -15,7 +15,7 @@ type Report
     = CorruptHistory
     | VersionChanged String String
     | MessageChanged String String
-    | SomethingChanged (List Change)
+    | SomethingChanged (Array Change)
 
 
 type Change
@@ -24,9 +24,9 @@ type Change
 
 
 type alias TagChanges =
-    { removed : List String
-    , changed : List String
-    , added : List String
+    { removed : Array String
+    , changed : Array String
+    , added : Array String
     , argsMatch : Bool
     }
 
@@ -60,22 +60,22 @@ evaluate report =
             Impossible
 
         SomethingChanged changes ->
-            worstCase Fine (List.map evaluateChange changes)
+            worstCase Fine (Array.map evaluateChange changes)
 
 
-worstCase : Status -> List Status -> Status
-worstCase status statusList =
-    case statusList of
-        [] ->
+worstCase : Status -> Array Status -> Status
+worstCase status statusArray =
+    case Array.popFirst statusArray of
+        Nothing ->
             status
 
-        Impossible :: _ ->
+        Just (Impossible, _) ->
             Impossible
 
-        Risky :: rest ->
+        Just (Risky, rest) ->
             worstCase Risky rest
 
-        Fine :: rest ->
+        Just (Fine, rest) ->
             worstCase status rest
 
 
@@ -96,6 +96,6 @@ evaluateChange change =
                 Fine
 
 
-some : List a -> Bool
+some : Array a -> Bool
 some list =
-    not (List.isEmpty list)
+    not (Array.isEmpty list)

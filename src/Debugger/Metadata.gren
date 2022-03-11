@@ -47,14 +47,14 @@ type alias Types =
 
 
 type alias Alias =
-    { args : List String
+    { args : Array String
     , tipe : String
     }
 
 
 type alias Union =
-    { args : List String
-    , tags : Dict String (List String)
+    { args : Array String
+    , tags : Dict String (Array String)
     }
 
 
@@ -78,13 +78,13 @@ isPortable { types } =
 
 type alias Error =
     { message : String
-    , problems : List ProblemType
+    , problems : Array ProblemType
     }
 
 
 type alias ProblemType =
     { name : String
-    , problems : List Problem
+    , problems : Array Problem
     }
 
 
@@ -99,29 +99,29 @@ type Problem
     | VirtualDom
 
 
-collectBadAliases : String -> Alias -> List ProblemType -> List ProblemType
+collectBadAliases : String -> Alias -> Array ProblemType -> Array ProblemType
 collectBadAliases name { tipe } list =
     case findProblems tipe of
         [] ->
             list
 
         problems ->
-            ProblemType name problems :: list
+            Array.pushFront (ProblemType name problems) list
 
 
-collectBadUnions : String -> Union -> List ProblemType -> List ProblemType
+collectBadUnions : String -> Union -> Array ProblemType -> Array ProblemType
 collectBadUnions name { tags } list =
-    case List.concatMap findProblems (List.concat (Dict.values tags)) of
+    case Array.flatMap findProblems (Array.flatten (Dict.values tags)) of
         [] ->
             list
 
         problems ->
-            ProblemType name problems :: list
+            Array.pushFront (ProblemType name problems) list
 
 
-findProblems : String -> List Problem
+findProblems : String -> Array Problem
 findProblems tipe =
-    List.filterMap (hasProblem tipe) problemTable
+    Array.filterMap (hasProblem tipe) problemTable
 
 
 hasProblem : String -> ( Problem, String ) -> Maybe Problem
@@ -133,7 +133,7 @@ hasProblem tipe ( problem, token ) =
         Nothing
 
 
-problemTable : List ( Problem, String )
+problemTable : Array ( Problem, String )
 problemTable =
     [ ( Function, "->" )
     , ( Decoder, "Json.Decode.Decoder" )
@@ -181,20 +181,20 @@ ignore key value report =
 -- CHECK ALIASES
 
 
-checkAlias : String -> Alias -> Alias -> List Report.Change -> List Report.Change
+checkAlias : String -> Alias -> Alias -> Array Report.Change -> Array Report.Change
 checkAlias name old new changes =
     if old.tipe == new.tipe && old.args == new.args then
         changes
 
     else
-        Report.AliasChange name :: changes
+        Array.pushFront (Report.AliasChange name) changes
 
 
 
 -- CHECK UNIONS
 
 
-checkUnion : String -> Union -> Union -> List Report.Change -> List Report.Change
+checkUnion : String -> Union -> Union -> Array Report.Change -> Array Report.Change
 checkUnion name old new changes =
     let
         tagChanges =
@@ -205,17 +205,17 @@ checkUnion name old new changes =
         changes
 
     else
-        Report.UnionChange name tagChanges :: changes
+        Array.pushFront (Report.UnionChange name tagChanges) changes
 
 
 removeTag : String -> a -> Report.TagChanges -> Report.TagChanges
 removeTag tag _ changes =
-    { changes | removed = tag :: changes.removed }
+    { changes | removed = Array.pushFront tag changes.removed }
 
 
 addTag : String -> a -> Report.TagChanges -> Report.TagChanges
 addTag tag _ changes =
-    { changes | added = tag :: changes.added }
+    { changes | added = Array.pushFront tag changes.added }
 
 
 checkTag : String -> a -> a -> Report.TagChanges -> Report.TagChanges
@@ -224,7 +224,7 @@ checkTag tag old new changes =
         changes
 
     else
-        { changes | changed = tag :: changes.changed }
+        { changes | changed = Array.pushFront tag changes.changed }
 
 
 
@@ -270,14 +270,14 @@ decodeTypes =
 decodeUnion : Decode.Decoder Union
 decodeUnion =
     Decode.map2 Union
-        (Decode.field "args" (Decode.list Decode.string))
-        (Decode.field "tags" (Decode.dict (Decode.list Decode.string)))
+        (Decode.field "args" (Decode.array Decode.string))
+        (Decode.field "tags" (Decode.dict (Decode.array Decode.string)))
 
 
 decodeAlias : Decode.Decoder Alias
 decodeAlias =
     Decode.map2 Alias
-        (Decode.field "args" (Decode.list Decode.string))
+        (Decode.field "args" (Decode.array Decode.string))
         (Decode.field "type" Decode.string)
 
 
@@ -310,7 +310,7 @@ encodeTypes { message, unions, aliases } =
 encodeAlias : Alias -> Encode.Value
 encodeAlias { args, tipe } =
     Encode.object
-        [ ( "args", Encode.list Encode.string args )
+        [ ( "args", Encode.array Encode.string args )
         , ( "type", Encode.string tipe )
         ]
 
@@ -318,8 +318,8 @@ encodeAlias { args, tipe } =
 encodeUnion : Union -> Encode.Value
 encodeUnion { args, tags } =
     Encode.object
-        [ ( "args", Encode.list Encode.string args )
-        , ( "tags", encodeDict (Encode.list Encode.string) tags )
+        [ ( "args", Encode.array Encode.string args )
+        , ( "tags", encodeDict (Encode.array Encode.string) tags )
         ]
 
 
@@ -327,5 +327,5 @@ encodeDict : (a -> Encode.Value) -> Dict String a -> Encode.Value
 encodeDict f dict =
     dict
         |> Dict.map (\key value -> f value)
-        |> Dict.toList
+        |> Dict.toArray
         |> Encode.object
