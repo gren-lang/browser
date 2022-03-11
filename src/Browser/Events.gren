@@ -270,7 +270,7 @@ subMap func (MySub node name decoder) =
 
 
 type alias State msg =
-  { subs : List ( String, MySub msg )
+  { subs : Array ( String, MySub msg )
   , pids : Dict.Dict String Process.Id
   }
 
@@ -295,32 +295,32 @@ onSelfMsg router { key, event } state =
       else
         Nothing
 
-    messages = List.filterMap toMessage state.subs
+    messages = Array.filterMap toMessage state.subs
   in
-  Task.sequence (List.map (Platform.sendToApp router) messages)
+  Task.sequence (Array.map (Platform.sendToApp router) messages)
     |> Task.andThen (\_ -> Task.succeed state)
 
 
-onEffects : Platform.Router msg Event -> List (MySub msg) -> State msg -> Task Never (State msg)
+onEffects : Platform.Router msg Event -> Array (MySub msg) -> State msg -> Task Never (State msg)
 onEffects router subs state =
   let
-    newSubs = List.map addKey subs
+    newSubs = Array.map addKey subs
 
     stepLeft _ pid (deads, lives, news) =
-      (pid :: deads, lives, news)
+      (Array.pushFront pid deads, lives, news)
 
     stepBoth key pid _ (deads, lives, news) =
       (deads, Dict.insert key pid lives, news)
 
     stepRight key sub (deads, lives, news) =
-      (deads, lives, spawn router key sub :: news)
+      (deads, lives, Array.pushFront (spawn router key sub) news)
 
     (deadPids, livePids, makeNewPids) =
-      Dict.merge stepLeft stepBoth stepRight state.pids (Dict.fromList newSubs) ([], Dict.empty, [])
+      Dict.merge stepLeft stepBoth stepRight state.pids (Dict.fromArray newSubs) ([], Dict.empty, [])
   in
-  Task.sequence (List.map Process.kill deadPids)
+  Task.sequence (Array.map Process.kill deadPids)
     |> Task.andThen (\_ -> Task.sequence makeNewPids)
-    |> Task.andThen (\pids -> Task.succeed (State newSubs (Dict.union livePids (Dict.fromList pids))))
+    |> Task.andThen (\pids -> Task.succeed (State newSubs (Dict.union livePids (Dict.fromArray pids))))
 
 
 
