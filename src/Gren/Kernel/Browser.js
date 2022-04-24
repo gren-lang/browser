@@ -1,6 +1,6 @@
 /*
 
-import Basics exposing (never)
+import Basics exposing (Unit, never)
 import Browser exposing (Internal, External)
 import Browser.Dom as Dom exposing (NotFound)
 import Gren.Kernel.Debug exposing (crash)
@@ -8,7 +8,6 @@ import Gren.Kernel.Debugger exposing (element, document)
 import Gren.Kernel.Json exposing (runHelp)
 import Gren.Kernel.Platform exposing (initialize)
 import Gren.Kernel.Scheduler exposing (binding, fail, rawSpawn, succeed, spawn)
-import Gren.Kernel.Utils exposing (Tuple0, Tuple2)
 import Gren.Kernel.VirtualDom exposing (appendChild, applyPatches, diff, doc, node, passiveSupported, render, divertHrefToApp)
 import Json.Decode as Json exposing (map)
 import Maybe exposing (Just, Nothing)
@@ -322,7 +321,7 @@ var _Browser_call = F2(function(functionName, id)
 {
 	return _Browser_withNode(id, function(node) {
 		node[functionName]();
-		return __Utils_Tuple0;
+		return __Basics_Unit;
 	});
 });
 
@@ -359,7 +358,7 @@ var _Browser_setViewport = F2(function(x, y)
 	return _Browser_withWindow(function()
 	{
 		_Browser_window.scroll(x, y);
-		return __Utils_Tuple0;
+		return __Basics_Unit;
 	});
 });
 
@@ -394,7 +393,7 @@ var _Browser_setViewportOf = F3(function(id, x, y)
 	{
 		node.scrollLeft = x;
 		node.scrollTop = y;
-		return __Utils_Tuple0;
+		return __Basics_Unit;
 	});
 });
 

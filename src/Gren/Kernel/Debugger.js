@@ -8,9 +8,10 @@ import Gren.Kernel.Debug exposing (crash)
 import Gren.Kernel.Json exposing (wrap)
 import Gren.Kernel.Platform exposing (initialize)
 import Gren.Kernel.Scheduler exposing (binding, succeed)
-import Gren.Kernel.Utils exposing (Tuple0, Tuple2, ap)
+import Gren.Kernel.Utils exposing (ap)
 import Gren.Kernel.VirtualDom exposing (node, applyPatches, diff, doc, makeStepper, map, render, virtualize, divertHrefToApp)
 import Json.Decode as Json exposing (map)
+import Basics exposing (Unit)
 import Array exposing (map, reverse)
 import Maybe exposing (Just, Nothing)
 import Set exposing (foldr)
@@ -175,7 +176,7 @@ function _Debugger_open(popout)
 	return __Scheduler_binding(function(callback)
 	{
 		_Debugger_openWindow(popout);
-		callback(__Scheduler_succeed(__Utils_Tuple0));
+		callback(__Scheduler_succeed(__Basics_Unit));
 	});
 }
 
@@ -232,7 +233,7 @@ function _Debugger_scroll(popout)
 				msgs.scrollTop = 0;
 			}
 		}
-		callback(__Scheduler_succeed(__Utils_Tuple0));
+		callback(__Scheduler_succeed(__Basics_Unit));
 	});
 }
 
@@ -249,7 +250,7 @@ var _Debugger_scrollTo = F2(function(id, popout)
 				msg.scrollIntoView(false);
 			}
 		}
-		callback(__Scheduler_succeed(__Utils_Tuple0));
+		callback(__Scheduler_succeed(__Basics_Unit));
 	});
 });
 
@@ -294,7 +295,7 @@ var _Debugger_download = F2(function(historyLength, json)
 		var fileName = 'history-' + historyLength + '.txt';
 		var jsonString = JSON.stringify(json);
 		var mime = 'text/plain;charset=utf-8';
-		var done = __Scheduler_succeed(__Utils_Tuple0);
+		var done = __Scheduler_succeed(__Basics_Unit);
 
 		// for IE10+
 		if (navigator.msSaveBlob)
@@ -463,7 +464,7 @@ var _Debugger_initCons = F2(function initConsHelp(value, list)
 
 var _Debugger_initKeyValueCons = F3(function(key, value, list)
 {
-	return [__Utils_Tuple2(_Debugger_init(key), _Debugger_init(value))].concat(list);
+	return [{ __$key: (_Debugger_init(key), __$value: _Debugger_init(value) }].concat(list);
 });
 
 function _Debugger_addSlashes(str, isChar)

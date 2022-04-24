@@ -65,10 +65,10 @@ sandbox :
     , view : model -> Html msg
     , update : msg -> model -> model
     }
-    -> Program () model msg
+    -> Program Unit
 sandbox impl =
     Gren.Kernel.Browser.element
-        { init = \() -> ( impl.init, Cmd.none )
+        { init = \Unit -> ( impl.init, Cmd.none )
         , view = impl.view
         , update = \msg model -> ( impl.update msg model, Cmd.none )
         , subscriptions = \_ -> Sub.none
