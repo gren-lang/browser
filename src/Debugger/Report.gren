@@ -69,13 +69,13 @@ worstCase status statusArray =
         Nothing ->
             status
 
-        Just (Impossible, _) ->
+        Just { first = Impossible } ->
             Impossible
 
-        Just (Risky, rest) ->
+        Just { first = Risky, rest } ->
             worstCase Risky rest
 
-        Just (Fine, rest) ->
+        Just { first = Fine, rest } ->
             worstCase status rest
 
 

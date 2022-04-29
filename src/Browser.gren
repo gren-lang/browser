@@ -45,7 +45,7 @@ import Url
 {-| Create a “sandboxed” program that cannot communicate with the outside
 world.
 
-This is great for learning the basics of [The Gren Architecture][tea]. You can
+This is great for learning the basics of [The Gren Architecture][gea]. You can
 see sandboxes in action in the following examples:
 
   - [Buttons](https://guide.gren-lang.org/architecture/buttons.html)
@@ -56,7 +56,7 @@ Those are nice, but **I very highly recommend reading [this guide][guide]
 straight through** to really learn how Gren works. Understanding the
 fundamentals actually pays off in this language!
 
-[tea]: https://guide.gren-lang.org/architecture/
+[gea]: https://guide.gren-lang.org/architecture/
 [guide]: https://guide.gren-lang.org/
 
 -}
@@ -65,12 +65,12 @@ sandbox :
     , view : model -> Html msg
     , update : msg -> model -> model
     }
-    -> Program Unit
+    -> Program Unit model msg
 sandbox impl =
     Gren.Kernel.Browser.element
-        { init = \Unit -> ( impl.init, Cmd.none )
+        { init = \Unit -> { model = impl.init, command = Cmd.none }
         , view = impl.view
-        , update = \msg model -> ( impl.update msg model, Cmd.none )
+        , update = \msg model -> { model = impl.update msg model, command = Cmd.none }
         , subscriptions = \_ -> Sub.none
         }
 
@@ -102,9 +102,9 @@ section][interop].
 
 -}
 element :
-    { init : flags -> ( model, Cmd msg )
+    { init : flags -> { model : model, command : Cmd msg }
     , view : model -> Html msg
-    , update : msg -> model -> ( model, Cmd msg )
+    , update : msg -> model -> { model : model, command : Cmd msg }
     , subscriptions : model -> Sub msg
     }
     -> Program flags model msg
@@ -120,9 +120,9 @@ element =
 can do in that `view` now gives you control over the `<title>` and `<body>`.
 -}
 document :
-    { init : flags -> ( model, Cmd msg )
+    { init : flags -> { model : model, command : Cmd msg }
     , view : model -> Document msg
-    , update : msg -> model -> ( model, Cmd msg )
+    , update : msg -> model -> { model : model, command : Cmd msg }
     , subscriptions : model -> Sub msg
     }
     -> Program flags model msg
@@ -205,9 +205,9 @@ reading a calculus book from page 314, it might seem confusing. Same here!
 
 -}
 application :
-    { init : flags -> Url.Url -> Navigation.Key -> ( model, Cmd msg )
+    { init : flags -> Url.Url -> Navigation.Key -> { model : model, command : Cmd msg }
     , view : model -> Document msg
-    , update : msg -> model -> ( model, Cmd msg )
+    , update : msg -> model -> { model : model, command : Cmd msg }
     , subscriptions : model -> Sub msg
     , onUrlRequest : UrlRequest -> msg
     , onUrlChange : Url.Url -> msg
@@ -254,20 +254,20 @@ Having a `UrlRequest` requires a case in your `update` like this:
     type Msg
         = ClickedLink UrlRequest
 
-    update : Msg -> Model -> ( Model, Cmd msg )
+    update : Msg -> Model -> { model : Model, command : Cmd msg }
     update msg model =
         case msg of
             ClickedLink urlRequest ->
                 case urlRequest of
                     Internal url ->
-                        ( model
-                        , Nav.pushUrl model.key (Url.toString url)
-                        )
+                        { model = model
+                        , command = Nav.pushUrl model.key (Url.toString url)
+                        }
 
                     External url ->
-                        ( model
-                        , Nav.load url
-                        )
+                        { model = model
+                        , command = Nav.load url
+                        }
 
 This is useful because it gives you a chance to customize the behavior in each
 case. Maybe on some `Internal` links you save the scroll position with

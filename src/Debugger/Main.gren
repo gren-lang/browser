@@ -144,22 +144,25 @@ cachedHistory model =
 -- INIT
 
 
-wrapInit : Encode.Value -> Popout -> (flags -> ( model, Cmd msg )) -> flags -> ( Model model msg, Cmd (Msg msg) )
+wrapInit : Encode.Value -> Popout -> (flags -> { model : model, command : Cmd msg }) -> flags -> { model : Model model msg, command : Cmd (Msg msg) }
 wrapInit metadata popout init flags =
   let
-    (userModel, userCommands) = init flags
+    { model = userModel, command = userCommands } = 
+        init flags
   in
-  ( { history = History.empty userModel
+  { model =
+    { history = History.empty userModel
     , state = Running userModel
     , expandoModel = Expando.init userModel
-    , expandoMsg = Expando.init ()
+    , expandoMsg = Expando.init Unit
     , metadata = Metadata.decode metadata
     , overlay = Overlay.none
     , popout = popout
     , layout = Horizontal Static 0.3 0.5
     }
-  , Cmd.map UserMsg userCommands
-  )
+  , command = 
+    Cmd.map UserMsg userCommands
+  }
 
 
 
@@ -189,84 +192,90 @@ type Msg msg
 
 
 type alias UserUpdate model msg =
-    msg -> model -> ( model, Cmd msg )
+    msg -> model -> { model : model, command : Cmd msg }
 
 
-wrapUpdate : UserUpdate model msg -> Msg msg -> Model model msg -> ( Model model msg, Cmd (Msg msg) )
+wrapUpdate : UserUpdate model msg -> Msg msg -> Model model msg -> { model : Model model msg, command : Cmd (Msg msg) }
 wrapUpdate update msg model =
   case msg of
     NoOp ->
-      ( model, Cmd.none )
+      { model = model
+      , command = Cmd.none 
+      }
 
     UserMsg userMsg ->
         let
           userModel = getLatestModel model.state
           newHistory = History.add userMsg userModel model.history
-          ( newUserModel, userCmds ) = update userMsg userModel
+          { model = newUserModel, command = userCmds } = update userMsg userModel
           commands = Cmd.map UserMsg userCmds
         in
         case model.state of
           Running _ ->
-            ( { model
-                | history = newHistory
-                , state = Running newUserModel
-                , expandoModel = Expando.merge newUserModel model.expandoModel
-                , expandoMsg = Expando.merge userMsg model.expandoMsg
-              }
-            , Cmd.batch [ commands, scroll model.popout ]
-            )
+            { model = 
+                { model
+                    | history = newHistory
+                    , state = Running newUserModel
+                    , expandoModel = Expando.merge newUserModel model.expandoModel
+                    , expandoMsg = Expando.merge userMsg model.expandoMsg
+                  }
+            , command =
+                Cmd.batch [ commands, scroll model.popout ]
+            }
 
           Paused index indexModel _ _ history ->
-            ( { model
-                | history = newHistory
-                , state = Paused index indexModel newUserModel userMsg history
-              }
-            , commands
-            )
+            { model =
+                { model
+                    | history = newHistory
+                    , state = Paused index indexModel newUserModel userMsg history
+                  }
+            , command = commands
+            }
 
     TweakExpandoMsg eMsg ->
-      ( { model | expandoMsg = Expando.update eMsg model.expandoMsg }
-      , Cmd.none
-      )
+      { model = { model | expandoMsg = Expando.update eMsg model.expandoMsg }
+      , command = Cmd.none
+      }
 
     TweakExpandoModel eMsg ->
-      ( { model | expandoModel = Expando.update eMsg model.expandoModel }
-      , Cmd.none
-      )
+      { model = { model | expandoModel = Expando.update eMsg model.expandoModel }
+      , command = Cmd.none
+      }
 
     Resume ->
         case model.state of
             Running _ ->
-                ( model, Cmd.none )
+                { model = model, command = Cmd.none }
 
             Paused _ _ userModel userMsg _ ->
-                ( { model
-                    | state = Running userModel
-                    , expandoMsg = Expando.merge userMsg model.expandoMsg
-                    , expandoModel = Expando.merge userModel model.expandoModel
-                  }
-                , scroll model.popout
-                )
+                { model =
+                    { model
+                        | state = Running userModel
+                        , expandoMsg = Expando.merge userMsg model.expandoMsg
+                        , expandoModel = Expando.merge userModel model.expandoModel
+                      }
+                , command = scroll model.popout
+                }
 
     Jump index ->
-      ( jumpUpdate update index model
-      , Cmd.none
-      )
+      { model = jumpUpdate update index model
+      , command = Cmd.none
+      }
 
     SliderJump index ->
-      ( jumpUpdate update index model
-      , scrollTo (History.idForMessageIndex index) model.popout
-      )
+      { model = jumpUpdate update index model
+      , command = scrollTo (History.idForMessageIndex index) model.popout
+      }
 
     Open ->
-      ( model
-      , Task.perform (always NoOp) (Gren.Kernel.Debugger.open model.popout)
-      )
+      { model = model
+      , command = Task.perform (always NoOp) (Gren.Kernel.Debugger.open model.popout)
+      }
 
     Up ->
       case model.state of
         Running _ ->
-          ( model, Cmd.none )
+          { model = model, command = Cmd.none }
 
         Paused i _ _ _ history ->
           let
@@ -286,22 +295,22 @@ wrapUpdate update msg model =
           if index > 0 then
             wrapUpdate update (SliderJump (index - 1)) model
           else
-            ( model, Cmd.none )
+            { model = model, command = Cmd.none }
 
     Import ->
       withGoodMetadata model <|
-        \_ -> ( model, upload model.popout )
+        \_ -> { model = model, command = upload model.popout }
 
     Export ->
       withGoodMetadata model <|
-        \metadata -> ( model, download metadata model.history )
+        \metadata -> { model = model, command = download metadata model.history }
 
     Upload jsonString ->
       withGoodMetadata model <|
         \metadata ->
           case Overlay.assessImport metadata jsonString of
             Err newOverlay ->
-              ( { model | overlay = newOverlay }, Cmd.none )
+              { model = { model | overlay = newOverlay }, command = Cmd.none }
 
             Ok rawHistory ->
               loadNewHistory rawHistory update model
@@ -309,22 +318,22 @@ wrapUpdate update msg model =
     OverlayMsg overlayMsg ->
       case Overlay.close overlayMsg model.overlay of
         Nothing ->
-          ( { model | overlay = Overlay.none }, Cmd.none )
+          { model = { model | overlay = Overlay.none }, command = Cmd.none }
 
         Just rawHistory ->
           loadNewHistory rawHistory update model
 
     SwapLayout ->
-      ( { model | layout = swapLayout model.layout }, Cmd.none )
+      { model = { model | layout = swapLayout model.layout }, command = Cmd.none }
 
     DragStart ->
-      ( { model | layout = setDragStatus Moving model.layout }, Cmd.none )
+      { model = { model | layout = setDragStatus Moving model.layout }, command = Cmd.none }
 
     Drag info ->
-      ( { model | layout = drag info model.layout }, Cmd.none )
+      { model = { model | layout = drag info model.layout }, command = Cmd.none }
 
     DragEnd ->
-      ( { model | layout = setDragStatus Static model.layout }, Cmd.none )
+      { model = { model | layout = setDragStatus Static model.layout }, command = Cmd.none }
 
 
 jumpUpdate : UserUpdate model msg -> Int -> Model model msg -> Model model msg
@@ -339,7 +348,7 @@ jumpUpdate update index model =
         currentModel =
             getLatestModel model.state
 
-        ( indexModel, indexMsg ) =
+        { model = indexModel, command = indexMsg } =
             History.get update index history
     in
     { model
@@ -404,8 +413,8 @@ download metadata history =
   Task.perform (\_ -> NoOp) <| Gren.Kernel.Debugger.download historyLength <|
     Gren.Kernel.Json.unwrap <|
       Encode.object
-        [ ( "metadata", Metadata.encode metadata )
-        , ( "history", History.encode history )
+        [ { key = "metadata", value = Metadata.encode metadata }
+        , { key = "history", value = History.encode history }
         ]
 
 
@@ -415,47 +424,49 @@ download metadata history =
 
 withGoodMetadata :
     Model model msg
-    -> (Metadata -> ( Model model msg, Cmd (Msg msg) ))
-    -> ( Model model msg, Cmd (Msg msg) )
+    -> (Metadata -> { model : Model model msg, command : Cmd (Msg msg) })
+    -> { model : Model model msg, command : Cmd (Msg msg) }
 withGoodMetadata model func =
   case model.metadata of
     Ok metadata ->
       func metadata
 
     Err error ->
-      ( { model | overlay = Overlay.badMetadata error }
-      , Cmd.none
-      )
+      { model = { model | overlay = Overlay.badMetadata error }
+      , command = Cmd.none
+      }
 
 
-loadNewHistory : Encode.Value -> UserUpdate model msg -> Model model msg -> ( Model model msg, Cmd (Msg msg) )
+loadNewHistory : Encode.Value -> UserUpdate model msg -> Model model msg -> { model : Model model msg, command : Cmd (Msg msg) }
 loadNewHistory rawHistory update model =
     let
         initialUserModel =
             History.getInitialModel model.history
 
         pureUserUpdate msg userModel =
-            Tuple.first (update msg userModel)
+            (update msg userModel).model
 
         decoder =
             History.decoder initialUserModel pureUserUpdate
     in
     case Decode.decodeValue decoder rawHistory of
         Err _ ->
-            ( { model | overlay = Overlay.corruptImport }
-            , Cmd.none
-            )
+            { model = { model | overlay = Overlay.corruptImport }
+            , command = Cmd.none
+            }
 
-        Ok ( latestUserModel, newHistory ) ->
-            ( { model
-                | history = newHistory
-                , state = Running latestUserModel
-                , expandoModel = Expando.init latestUserModel
-                , expandoMsg = Expando.init (History.getRecentMsg newHistory)
-                , overlay = Overlay.none
-              }
-            , Cmd.none
-            )
+        Ok { model = latestUserModel, history = newHistory } ->
+            { model =
+                { model
+                    | history = newHistory
+                    , state = Running latestUserModel
+                    , expandoModel = Expando.init latestUserModel
+                    , expandoMsg = Expando.init (History.getRecentMsg newHistory)
+                    , overlay = Overlay.none
+                  }
+            , command = 
+                Cmd.none
+            }
 
 
 
@@ -622,7 +633,7 @@ toMouseBlocker layout =
 viewHistory : Maybe Int -> History model msg -> Layout -> Html (Msg msg)
 viewHistory maybeIndex history layout =
   let
-    (w,h) = toHistoryPercents layout
+    { width = w, height = h } = toHistoryPercents layout
     block = toMouseBlocker layout
   in
   div
@@ -641,11 +652,11 @@ viewHistory maybeIndex history layout =
     ]
 
 
-toHistoryPercents : Layout -> (String, String)
+toHistoryPercents : Layout -> { width : String, height : String }
 toHistoryPercents layout =
   case layout of
-    Horizontal _ x _ -> ( toPercent x, "100%" )
-    Vertical   _ _ y -> ( "100%", toPercent (1 - y) )
+    Horizontal _ x _ -> { width = toPercent x, height = "100%" }
+    Vertical   _ _ y -> { width = "100%", height = toPercent (1 - y) }
 
 
 viewHistorySlider : History model msg -> Maybe Int -> Html (Msg msg)
@@ -771,7 +782,7 @@ toHistoryIcon layout =
 viewExpando : Expando -> Expando -> Layout -> Html (Msg msg)
 viewExpando expandoMsg expandoModel layout =
   let
-    (w,h) = toExpandoPercents layout
+    { width = w, height = h } = toExpandoPercents layout
     block = toMouseBlocker layout
   in
   div
@@ -794,11 +805,11 @@ viewExpando expandoMsg expandoModel layout =
     ]
 
 
-toExpandoPercents : Layout -> (String, String)
+toExpandoPercents : Layout -> { width : String, height : String }
 toExpandoPercents layout =
   case layout of
-    Horizontal _ x _ -> ( toPercent (1 - x), "100%" )
-    Vertical   _ _ y -> ( "100%", toPercent y )
+    Horizontal _ x _ -> { width = toPercent (1 - x), height = "100%" }
+    Vertical   _ _ y -> { width = "100%", height = toPercent y }
 
 
 -- No case/let/if in parentheses. Always new top-level function.

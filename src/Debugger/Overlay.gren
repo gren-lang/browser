@@ -81,7 +81,7 @@ assessImport metadata jsonString =
         Err _ ->
             Err corruptImport
 
-        Ok ( foreignMetadata, rawHistory ) ->
+        Ok { metadata = foreignMetadata, historyJson = rawHistory } ->
             let
                 report =
                     Metadata.check foreignMetadata metadata
@@ -97,9 +97,9 @@ assessImport metadata jsonString =
                     Ok rawHistory
 
 
-uploadDecoder : Decode.Decoder ( Metadata, Encode.Value )
+uploadDecoder : Decode.Decoder { metadata : Metadata, historyJson : Encode.Value }
 uploadDecoder =
-    Decode.map2 (\x y -> ( x, y ))
+    Decode.map2 (\x y -> { metadata = x, historyJson = y })
         (Decode.field "metadata" Metadata.decoder)
         (Decode.field "history" Decode.value)
 
@@ -345,15 +345,15 @@ viewMention tags verbed =
         Nothing ->
             text ""
 
-        Just (tag, []) ->
+        Just { first = tag, rest = [] } ->
             li []
                 [ text verbed, tag, text "." ]
 
-        Just (tag2, [tag1]) ->
+        Just { first = tag2, rest = [tag1] } ->
             li []
                 [ text verbed, tag1, text " and ", tag2, text "." ]
 
-        Just (lastTag, otherTags) ->
+        Just { first = lastTag, rest = otherTags } ->
             li [] <|
                 [text verbed]
                     ++ Array.intersperse (text ", ") (Array.reverse otherTags)
@@ -419,13 +419,13 @@ addCommas items =
     Nothing ->
       ""
 
-    Just (item, []) ->
+    Just { first = item, rest = [] } ->
       item
 
-    Just (item1, [item2]) ->
+    Just { first = item1, rest = [item2] } ->
       item1 ++ " and " ++ item2
 
-    Just (lastItem, otherItems) ->
+    Just { first = lastItem, rest = otherItems } ->
       String.join ", " (otherItems ++ [ " and " ++ lastItem ])
 
 

@@ -106,7 +106,7 @@ collectBadAliases name { tipe } list =
             list
 
         problems ->
-            Array.pushFront (ProblemType name problems) list
+            Array.pushLast (ProblemType name problems) list
 
 
 collectBadUnions : String -> Union -> Array ProblemType -> Array ProblemType
@@ -116,7 +116,7 @@ collectBadUnions name { tags } list =
             list
 
         problems ->
-            Array.pushFront (ProblemType name problems) list
+            Array.pushFirst (ProblemType name problems) list
 
 
 findProblems : String -> Array Problem
@@ -124,8 +124,8 @@ findProblems tipe =
     Array.filterMap (hasProblem tipe) problemTable
 
 
-hasProblem : String -> ( Problem, String ) -> Maybe Problem
-hasProblem tipe ( problem, token ) =
+hasProblem : String -> { problem : Problem, token : String } -> Maybe Problem
+hasProblem tipe { problem, token } =
     if String.contains token tipe then
         Just problem
 
@@ -133,17 +133,17 @@ hasProblem tipe ( problem, token ) =
         Nothing
 
 
-problemTable : Array ( Problem, String )
+problemTable : Array { problem : Problem, token : String }
 problemTable =
-    [ ( Function, "->" )
-    , ( Decoder, "Json.Decode.Decoder" )
-    , ( Task, "Task.Task" )
-    , ( Process, "Process.Id" )
-    , ( Socket, "WebSocket.LowLevel.WebSocket" )
-    , ( Request, "Http.Request" )
-    , ( Program, "Platform.Program" )
-    , ( VirtualDom, "VirtualDom.Node" )
-    , ( VirtualDom, "VirtualDom.Attribute" )
+    [ { problem = Function, token = "->" }
+    , { problem = Decoder, token = "Json.Decode.Decoder" }
+    , { problem = Task, token = "Task.Task" }
+    , { problem = Process, token = "Process.Id" }
+    , { problem = Socket, token = "WebSocket.LowLevel.WebSocket" }
+    , { problem = Request, token = "Http.Request" }
+    , { problem = Program, token = "Platform.Program" }
+    , { problem = VirtualDom, token = "VirtualDom.Node" }
+    , { problem = VirtualDom, token = "VirtualDom.Attribute" }
     ]
 
 
@@ -187,7 +187,7 @@ checkAlias name old new changes =
         changes
 
     else
-        Array.pushFront (Report.AliasChange name) changes
+        Array.pushFirst (Report.AliasChange name) changes
 
 
 
@@ -205,17 +205,17 @@ checkUnion name old new changes =
         changes
 
     else
-        Array.pushFront (Report.UnionChange name tagChanges) changes
+        Array.pushFirst (Report.UnionChange name tagChanges) changes
 
 
 removeTag : String -> a -> Report.TagChanges -> Report.TagChanges
 removeTag tag _ changes =
-    { changes | removed = Array.pushFront tag changes.removed }
+    { changes | removed = Array.pushFirst tag changes.removed }
 
 
 addTag : String -> a -> Report.TagChanges -> Report.TagChanges
 addTag tag _ changes =
-    { changes | added = Array.pushFront tag changes.added }
+    { changes | added = Array.pushFirst tag changes.added }
 
 
 checkTag : String -> a -> a -> Report.TagChanges -> Report.TagChanges
@@ -224,7 +224,7 @@ checkTag tag old new changes =
         changes
 
     else
-        { changes | changed = Array.pushFront tag changes.changed }
+        { changes | changed = Array.pushFirst tag changes.changed }
 
 
 
@@ -288,38 +288,38 @@ decodeAlias =
 encode : Metadata -> Encode.Value
 encode { versions, types } =
     Encode.object
-        [ ( "versions", encodeVersions versions )
-        , ( "types", encodeTypes types )
+        [ { key = "versions", value = encodeVersions versions }
+        , { key = "types", value = encodeTypes types }
         ]
 
 
 encodeVersions : Versions -> Encode.Value
 encodeVersions { elm } =
-    Encode.object [ ( "elm", Encode.string elm ) ]
+    Encode.object [ { key = "elm", value = Encode.string elm } ]
 
 
 encodeTypes : Types -> Encode.Value
 encodeTypes { message, unions, aliases } =
     Encode.object
-        [ ( "message", Encode.string message )
-        , ( "aliases", encodeDict encodeAlias aliases )
-        , ( "unions", encodeDict encodeUnion unions )
+        [ { key = "message", value = Encode.string message }
+        , { key = "aliases", value = encodeDict encodeAlias aliases }
+        , { key = "unions", value = encodeDict encodeUnion unions }
         ]
 
 
 encodeAlias : Alias -> Encode.Value
 encodeAlias { args, tipe } =
     Encode.object
-        [ ( "args", Encode.array Encode.string args )
-        , ( "type", Encode.string tipe )
+        [ { key = "args", value = Encode.array Encode.string args }
+        , { key = "type", value = Encode.string tipe }
         ]
 
 
 encodeUnion : Union -> Encode.Value
 encodeUnion { args, tags } =
     Encode.object
-        [ ( "args", Encode.array Encode.string args )
-        , ( "tags", encodeDict (Encode.array Encode.string) tags )
+        [ { key = "args", value = Encode.array Encode.string args }
+        , { key = "tags", value = encodeDict (Encode.array Encode.string) tags }
         ]
 
 

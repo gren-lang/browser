@@ -65,15 +65,15 @@ init =
 
 onEffects : Platform.Router msg Int -> Array (MySub msg) -> State msg -> Task Never (State msg)
 onEffects router subs { request, oldTime } =
-    case ( request, subs ) of
-        ( Nothing, [] ) ->
+    case { r = request, s = subs } of
+        { r = Nothing, s = [] } ->
             init
 
-        ( Just pid, [] ) ->
+        { r = Just pid, s = [] } ->
             Process.kill pid
                 |> Task.andThen (\_ -> init)
 
-        ( Nothing, _ ) ->
+        { r = Nothing, s = _ } ->
             Process.spawn (Task.andThen (Platform.sendToSelf router) rAF)
                 |> Task.andThen
                     (\pid ->
@@ -81,7 +81,7 @@ onEffects router subs { request, oldTime } =
                             |> Task.andThen (\time -> Task.succeed (State subs (Just pid) time))
                     )
 
-        ( Just _, _ ) ->
+        { r = Just _, s = _ } ->
             Task.succeed (State subs request oldTime)
 
 
@@ -106,9 +106,9 @@ onSelfMsg router newTime { subs, oldTime } =
 
 rAF : Task x Int
 rAF =
-    Gren.Kernel.Browser.rAF ()
+    Gren.Kernel.Browser.rAF Unit
 
 
 now : Task x Int
 now =
-    Gren.Kernel.Browser.now ()
+    Gren.Kernel.Browser.now Unit
