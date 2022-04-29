@@ -563,7 +563,15 @@ type alias DragInfo =
 onMouseMove : Attribute (Msg msg)
 onMouseMove =
   on "mousemove" <| Decode.map Drag <|
-    Decode.map5 DragInfo
+    Decode.map5 
+      (\x y down width height ->
+        { x = x
+        , y = y
+        , down = down
+        , width = width
+        , height = height
+        }
+      )
       (Decode.field "pageX" Decode.float)
       (Decode.field "pageY" Decode.float)
       (Decode.field "buttons" (Decode.map (\v -> v == 1) Decode.int))

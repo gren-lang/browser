@@ -72,7 +72,14 @@ type alias Snapshot model msg =
 
 empty : model -> History model msg
 empty model =
-    History Array.empty (RecentHistory model [] 0) 0
+    { snapshots = Array.empty 
+    , recent = 
+        { model = model
+        , messages = [] 
+        , numMessages = 0
+        } 
+    , numMessages = 0
+    }
 
 
 size : History model msg -> Int
@@ -142,10 +149,16 @@ add : msg -> model -> History model msg -> History model msg
 add msg model { snapshots, recent, numMessages } =
     case addRecent msg model recent of
         { snapshot = Just snapshot, recentHistory = newRecent } ->
-            History (Array.pushLast snapshot snapshots) newRecent (numMessages + 1)
+            { snapshots = (Array.pushLast snapshot snapshots) 
+            , recent = newRecent 
+            , numMessages = (numMessages + 1)
+            }
 
         { snapshot = Nothing, recentHistory = newRecent } ->
-            History snapshots newRecent (numMessages + 1)
+            { snapshots = snapshots
+            , recent = newRecent
+            , numMessages = (numMessages + 1)
+            }
 
 
 addRecent :
@@ -155,13 +168,17 @@ addRecent :
     -> { snapshot : Maybe (Snapshot model msg), recentHistory : RecentHistory model msg }
 addRecent msg newModel { model, messages, numMessages } =
     if numMessages == maxSnapshotSize then
-        { snapshot = Just (Snapshot model messages)
-        , recentHistory = RecentHistory newModel [ msg ] 1
+        { snapshot = Just { model = model, messages = messages }
+        , recentHistory = { model = newModel, messages = [ msg ], numMessages = 1 }
         }
 
     else
         { snapshot = Nothing
-        , recentHistory = RecentHistory model (Array.pushFirst msg messages) (numMessages + 1)
+        , recentHistory = 
+            { model = model 
+            , messages = (Array.pushFirst msg messages) 
+            , numMessages = (numMessages + 1)
+            }
         }
 
 

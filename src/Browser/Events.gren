@@ -277,7 +277,7 @@ type alias State msg =
 
 init : Task Never (State msg)
 init =
-  Task.succeed (State [] Dict.empty)
+  Task.succeed { subs = [], pids = Dict.empty }
 
 
 type alias Event =
@@ -320,7 +320,7 @@ onEffects router subs state =
   in
   Task.sequence (Array.map Process.kill deadPids)
     |> Task.andThen (\_ -> Task.sequence makeNewPids)
-    |> Task.andThen (\pids -> Task.succeed (State newSubs (Dict.union livePids (Dict.fromArray pids))))
+    |> Task.andThen (\pids -> Task.succeed { subs = newSubs, pids = (Dict.union livePids (Dict.fromArray pids))})
 
 
 
@@ -353,4 +353,4 @@ spawn router key (MySub node name _) =
   in
   Task.map (\value -> { key = key, value = value }) <|
     Gren.Kernel.Browser.on actualNode name <|
-      \event -> Platform.sendToSelf router (Event key event)
+      \event -> Platform.sendToSelf router { key = key, event = event }

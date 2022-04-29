@@ -33,12 +33,16 @@ type alias TagChanges =
 
 emptyTagChanges : Bool -> TagChanges
 emptyTagChanges argsMatch =
-    TagChanges [] [] [] argsMatch
+    { removed = []
+    , changed = []
+    , added = [] 
+    , argsMatch = argsMatch
+    }
 
 
 hasTagChanges : TagChanges -> Bool
 hasTagChanges tagChanges =
-    tagChanges == TagChanges [] [] [] True
+    tagChanges == (emptyTagChanges True)
 
 
 type Status

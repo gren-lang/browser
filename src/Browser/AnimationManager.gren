@@ -60,7 +60,7 @@ type alias State msg =
 
 init : Task Never (State msg)
 init =
-    Task.succeed (State [] Nothing 0)
+    Task.succeed { subs = [], request = Nothing, oldTime = 0 }
 
 
 onEffects : Platform.Router msg Int -> Array (MySub msg) -> State msg -> Task Never (State msg)
@@ -78,11 +78,11 @@ onEffects router subs { request, oldTime } =
                 |> Task.andThen
                     (\pid ->
                         now
-                            |> Task.andThen (\time -> Task.succeed (State subs (Just pid) time))
+                            |> Task.andThen (\time -> Task.succeed { subs = subs, request = (Just pid), oldTime = time })
                     )
 
         { r = Just _, s = _ } ->
-            Task.succeed (State subs request oldTime)
+            Task.succeed { subs = subs, request = request, oldTime = oldTime }
 
 
 onSelfMsg : Platform.Router msg Int -> Int -> State msg -> Task Never (State msg)
@@ -100,7 +100,7 @@ onSelfMsg router newTime { subs, oldTime } =
         |> Task.andThen
             (\pid ->
                 Task.sequence (Array.map send subs)
-                    |> Task.andThen (\_ -> Task.succeed (State subs (Just pid) newTime))
+                    |> Task.andThen (\_ -> Task.succeed { subs = subs, request = (Just pid), oldTime = newTime })
             )
 
 

@@ -73,7 +73,7 @@ isPortable { types } =
             Nothing
 
         problems ->
-            Just (Error types.message problems)
+            Just { message = types.message, problems = problems }
 
 
 type alias Error =
@@ -106,7 +106,7 @@ collectBadAliases name { tipe } list =
             list
 
         problems ->
-            Array.pushLast (ProblemType name problems) list
+            Array.pushLast { name = name, problems = problems } list
 
 
 collectBadUnions : String -> Union -> Array ProblemType -> Array ProblemType
@@ -116,7 +116,7 @@ collectBadUnions name { tags } list =
             list
 
         problems ->
-            Array.pushFirst (ProblemType name problems) list
+            Array.pushFirst { name = name, problems = problems } list
 
 
 findProblems : String -> Array Problem
@@ -235,7 +235,7 @@ decode : Encode.Value -> Result Error Metadata
 decode value =
     case Decode.decodeValue decoder value of
         Err _ ->
-            Err (Error "The compiler is generating bad metadata. This is a compiler bug!" [])
+            Err { message = "The compiler is generating bad metadata. This is a compiler bug!", problems = [] }
 
         Ok metadata ->
             case isPortable metadata of
@@ -248,20 +248,26 @@ decode value =
 
 decoder : Decode.Decoder Metadata
 decoder =
-    Decode.map2 Metadata
+    Decode.map2 (\versions types -> { versions = versions, types = types })
         (Decode.field "versions" decodeVersions)
         (Decode.field "types" decodeTypes)
 
 
 decodeVersions : Decode.Decoder Versions
 decodeVersions =
-    Decode.map Versions
+    Decode.map (\elm -> { elm = elm })
         (Decode.field "elm" Decode.string)
 
 
 decodeTypes : Decode.Decoder Types
 decodeTypes =
-    Decode.map3 Types
+    Decode.map3
+        (\message aliases unions ->
+            { message = message
+            , aliases = aliases
+            , unions = unions
+            }
+        )
         (Decode.field "message" Decode.string)
         (Decode.field "aliases" (Decode.dict decodeAlias))
         (Decode.field "unions" (Decode.dict decodeUnion))
@@ -269,14 +275,14 @@ decodeTypes =
 
 decodeUnion : Decode.Decoder Union
 decodeUnion =
-    Decode.map2 Union
+    Decode.map2 (\args tags -> { args = args, tags = tags })
         (Decode.field "args" (Decode.array Decode.string))
         (Decode.field "tags" (Decode.dict (Decode.array Decode.string)))
 
 
 decodeAlias : Decode.Decoder Alias
 decodeAlias =
-    Decode.map2 Alias
+    Decode.map2 (\args tipe -> { args = args, tipe = tipe })
         (Decode.field "args" (Decode.array Decode.string))
         (Decode.field "type" Decode.string)
 
