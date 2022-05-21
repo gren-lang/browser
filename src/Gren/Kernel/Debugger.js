@@ -464,7 +464,7 @@ var _Debugger_initCons = F2(function initConsHelp(value, list)
 
 var _Debugger_initKeyValueCons = F3(function(key, value, list)
 {
-	return [{ __$key: (_Debugger_init(key), __$value: _Debugger_init(value) }].concat(list);
+	return [{ __$key: _Debugger_init(key), __$value: _Debugger_init(value) }].concat(list);
 });
 
 function _Debugger_addSlashes(str, isChar)
