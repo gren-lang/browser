@@ -126,7 +126,7 @@ var _Debugger_document = F4(function(impl, flagDecoder, debugMetadata, args)
 				var nextNode = __VirtualDom_node('body')([])(
 					__Utils_ap(
 						A2(__Array_map, __VirtualDom_map(__Main_UserMsg), doc.__$body),
-						[__Main_cornerView(model)])
+						[__Main_cornerView(model)]
 					)
 				);
 				var patches = __VirtualDom_diff(currNode, nextNode);
