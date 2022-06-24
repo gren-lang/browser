@@ -10,7 +10,18 @@
         "Browser.Events",
         "Browser.Navigation",
         "File",
-        "Http"
+        "Http",
+        "VirtualDom",
+        "Html",
+        "Html.Attributes",
+        "Html.Events",
+        "Html.Keyed",
+        "Html.Lazy",
+        "Svg",
+        "Svg.Attributes",
+        "Svg.Events",
+        "Svg.Keyed",
+        "Svg.Lazy"
     ],
     "gren-version": "0.2.0 <= v < 0.3.0",
     "dependencies": {

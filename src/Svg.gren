@@ -1,0 +1,613 @@
+module Svg exposing
+  ( Svg, Attribute, text, node, map
+  , svg, foreignObject
+  , circle, ellipse, image, line, path, polygon, polyline, rect, use
+  , animate, animateColor, animateMotion, animateTransform, mpath, set
+  , desc, metadata, title
+  , a, defs, g, marker, mask, pattern, switch, symbol
+  , altGlyph, altGlyphDef, altGlyphItem, glyph, glyphRef, textPath, text_
+  , tref, tspan
+  , font
+  , linearGradient, radialGradient, stop
+  , feBlend, feColorMatrix, feComponentTransfer, feComposite
+  , feConvolveMatrix, feDiffuseLighting, feDisplacementMap, feFlood, feFuncA
+  , feFuncB, feFuncG, feFuncR, feGaussianBlur, feImage, feMerge, feMergeNode
+  , feMorphology, feOffset, feSpecularLighting, feTile, feTurbulence
+  , feDistantLight, fePointLight, feSpotLight
+  , clipPath, colorProfile, cursor, filter, style, view
+  )
+
+{-|
+
+# SVG Nodes
+@docs Svg, Attribute, text, node, map
+
+# HTML Embedding
+@docs svg, foreignObject
+
+# Graphics elements
+@docs circle, ellipse, image, line, path, polygon, polyline, rect, use
+
+# Animation elements
+@docs animate, animateColor, animateMotion, animateTransform, mpath, set
+
+# Descriptive elements
+@docs desc, metadata, title
+
+# Containers
+@docs a, defs, g, marker, mask, pattern, switch, symbol
+
+# Text
+@docs altGlyph, altGlyphDef, altGlyphItem, glyph, glyphRef, textPath, text_,
+  tref, tspan
+
+# Fonts
+@docs font
+
+# Gradients
+@docs linearGradient, radialGradient, stop
+
+# Filters
+@docs feBlend, feColorMatrix, feComponentTransfer, feComposite,
+  feConvolveMatrix, feDiffuseLighting, feDisplacementMap, feFlood, feFuncA,
+  feFuncB, feFuncG, feFuncR, feGaussianBlur, feImage, feMerge, feMergeNode,
+  feMorphology, feOffset, feSpecularLighting, feTile, feTurbulence
+
+# Light source elements
+@docs feDistantLight, fePointLight, feSpotLight
+
+# Miscellaneous
+@docs clipPath, colorProfile, cursor, filter, style, view
+-}
+
+
+import Html
+import VirtualDom
+
+
+
+-- PRIMITIVES
+
+
+{-| The core building block to create SVG. This library is filled with helper
+functions to create these `Svg` values.
+
+This is backed by `VirtualDom.Node` in `elm/virtual-dom`, but you do not
+need to know any details about that to use this library!
+-}
+type alias Svg msg =
+  VirtualDom.Node msg
+
+
+{-| Set attributes on your `Svg`.
+-}
+type alias Attribute msg =
+  VirtualDom.Attribute msg
+
+
+{-| Create any SVG node. To create a `<rect>` helper function, you would write:
+
+    rect : Array (Attribute msg) -> Array (Svg msg) -> Svg msg
+    rect attributes children =
+        node "rect" attributes children
+
+You should always be able to use the helper functions already defined in this
+library though!
+-}
+node : String -> Array (Attribute msg) -> Array (Svg msg) -> Svg msg
+node =
+  VirtualDom.nodeNS "http://www.w3.org/2000/svg"
+
+
+{-| A simple text node, no tags at all.
+
+Warning: not to be confused with `text_` which produces the SVG `<text>` tag!
+-}
+text : String -> Svg msg
+text =
+  VirtualDom.text
+
+
+{-| Transform the messages produced by some `Svg`.
+-}
+map : (a -> msg) -> Svg a -> Svg msg
+map =
+  VirtualDom.map
+
+
+
+-- HELPERS
+
+
+trustedNode : String -> Array (Attribute msg) -> Array (Svg msg) -> Svg msg
+trustedNode =
+  VirtualDom.nodeNS "http://www.w3.org/2000/svg"
+
+
+
+-- TAGS
+
+
+{-| The root `<svg>` node for any SVG scene. This example shows a scene
+containing a rounded rectangle:
+
+    import Svg exposing (..)
+    import Svg.Attributes exposing (..)
+
+    roundRect =
+        svg
+          [ width "120", height "120", viewBox "0 0 120 120" ]
+          [ rect [ x "10", y "10", width "100", height "100", rx "15", ry "15" ] [] ]
+-}
+svg : Array (Html.Attribute msg) -> Array (Svg msg) -> Html.Html msg
+svg =
+  trustedNode "svg"
+
+
+{-|-}
+foreignObject : Array (Attribute msg) -> Array (Html.Html msg) -> Svg msg
+foreignObject =
+  trustedNode "foreignObject"
+
+
+-- Animation elements
+
+
+{-|-}
+animate : Array (Attribute msg) -> Array (Svg msg) -> Svg msg
+animate =
+  trustedNode "animate"
+
+
+{-|-}
+animateColor : Array (Attribute msg) -> Array (Svg msg) -> Svg msg
+animateColor =
+  trustedNode "animateColor"
+
+
+{-|-}
+animateMotion : Array (Attribute msg) -> Array (Svg msg) -> Svg msg
+animateMotion =
+  trustedNode "animateMotion"
+
+
+{-|-}
+animateTransform : Array (Attribute msg) -> Array (Svg msg) -> Svg msg
+animateTransform =
+  trustedNode "animateTransform"
+
+
+{-|-}
+mpath : Array (Attribute msg) -> Array (Svg msg) -> Svg msg
+mpath =
+  trustedNode "mpath"
+
+
+{-|-}
+set : Array (Attribute msg) -> Array (Svg msg) -> Svg msg
+set =
+  trustedNode "set"
+
+
+
+-- Container elements
+
+
+{-| The SVG Anchor Element defines a hyperlink.
+-}
+a : Array (Attribute msg) -> Array (Svg msg) -> Svg msg
+a =
+  trustedNode "a"
+
+
+{-|-}
+defs : Array (Attribute msg) -> Array (Svg msg) -> Svg msg
+defs =
+  trustedNode "defs"
+
+
+{-|-}
+g : Array (Attribute msg) -> Array (Svg msg) -> Svg msg
+g =
+  trustedNode "g"
+
+
+{-|-}
+marker : Array (Attribute msg) -> Array (Svg msg) -> Svg msg
+marker =
+  trustedNode "marker"
+
+
+{-|-}
+mask : Array (Attribute msg) -> Array (Svg msg) -> Svg msg
+mask =
+  trustedNode "mask"
+
+
+{-|-}
+pattern : Array (Attribute msg) -> Array (Svg msg) -> Svg msg
+pattern =
+  trustedNode "pattern"
+
+
+{-|-}
+switch : Array (Attribute msg) -> Array (Svg msg) -> Svg msg
+switch =
+  trustedNode "switch"
+
+
+{-|-}
+symbol : Array (Attribute msg) -> Array (Svg msg) -> Svg msg
+symbol =
+  trustedNode "symbol"
+
+
+
+-- Descriptive elements
+
+
+{-|-}
+desc : Array (Attribute msg) -> Array (Svg msg) -> Svg msg
+desc =
+  trustedNode "desc"
+
+
+{-|-}
+metadata : Array (Attribute msg) -> Array (Svg msg) -> Svg msg
+metadata =
+  trustedNode "metadata"
+
+
+{-|-}
+title : Array (Attribute msg) -> Array (Svg msg) -> Svg msg
+title =
+  trustedNode "title"
+
+
+
+-- Filter primitive elements
+
+
+{-|-}
+feBlend : Array (Attribute msg) -> Array (Svg msg) -> Svg msg
+feBlend =
+  trustedNode "feBlend"
+
+
+{-|-}
+feColorMatrix : Array (Attribute msg) -> Array (Svg msg) -> Svg msg
+feColorMatrix =
+  trustedNode "feColorMatrix"
+
+
+{-|-}
+feComponentTransfer : Array (Attribute msg) -> Array (Svg msg) -> Svg msg
+feComponentTransfer =
+  trustedNode "feComponentTransfer"
+
+
+{-|-}
+feComposite : Array (Attribute msg) -> Array (Svg msg) -> Svg msg
+feComposite =
+  trustedNode "feComposite"
+
+
+{-|-}
+feConvolveMatrix : Array (Attribute msg) -> Array (Svg msg) -> Svg msg
+feConvolveMatrix =
+  trustedNode "feConvolveMatrix"
+
+
+{-|-}
+feDiffuseLighting : Array (Attribute msg) -> Array (Svg msg) -> Svg msg
+feDiffuseLighting =
+  trustedNode "feDiffuseLighting"
+
+
+{-|-}
+feDisplacementMap : Array (Attribute msg) -> Array (Svg msg) -> Svg msg
+feDisplacementMap =
+  trustedNode "feDisplacementMap"
+
+
+{-|-}
+feFlood : Array (Attribute msg) -> Array (Svg msg) -> Svg msg
+feFlood =
+  trustedNode "feFlood"
+
+
+{-|-}
+feFuncA : Array (Attribute msg) -> Array (Svg msg) -> Svg msg
+feFuncA =
+  trustedNode "feFuncA"
+
+
+{-|-}
+feFuncB : Array (Attribute msg) -> Array (Svg msg) -> Svg msg
+feFuncB =
+  trustedNode "feFuncB"
+
+
+{-|-}
+feFuncG : Array (Attribute msg) -> Array (Svg msg) -> Svg msg
+feFuncG =
+  trustedNode "feFuncG"
+
+
+{-|-}
+feFuncR : Array (Attribute msg) -> Array (Svg msg) -> Svg msg
+feFuncR =
+  trustedNode "feFuncR"
+
+
+{-|-}
+feGaussianBlur : Array (Attribute msg) -> Array (Svg msg) -> Svg msg
+feGaussianBlur =
+  trustedNode "feGaussianBlur"
+
+
+{-|-}
+feImage : Array (Attribute msg) -> Array (Svg msg) -> Svg msg
+feImage =
+  trustedNode "feImage"
+
+
+{-|-}
+feMerge : Array (Attribute msg) -> Array (Svg msg) -> Svg msg
+feMerge =
+  trustedNode "feMerge"
+
+
+{-|-}
+feMergeNode : Array (Attribute msg) -> Array (Svg msg) -> Svg msg
+feMergeNode =
+  trustedNode "feMergeNode"
+
+
+{-|-}
+feMorphology : Array (Attribute msg) -> Array (Svg msg) -> Svg msg
+feMorphology =
+  trustedNode "feMorphology"
+
+
+{-|-}
+feOffset : Array (Attribute msg) -> Array (Svg msg) -> Svg msg
+feOffset =
+  trustedNode "feOffset"
+
+
+{-|-}
+feSpecularLighting : Array (Attribute msg) -> Array (Svg msg) -> Svg msg
+feSpecularLighting =
+  trustedNode "feSpecularLighting"
+
+
+{-|-}
+feTile : Array (Attribute msg) -> Array (Svg msg) -> Svg msg
+feTile =
+  trustedNode "feTile"
+
+
+{-|-}
+feTurbulence : Array (Attribute msg) -> Array (Svg msg) -> Svg msg
+feTurbulence =
+  trustedNode "feTurbulence"
+
+
+
+-- Font elements
+
+
+{-|-}
+font : Array (Attribute msg) -> Array (Svg msg) -> Svg msg
+font =
+  trustedNode "font"
+
+
+
+-- Gradient elements
+
+
+{-|-}
+linearGradient : Array (Attribute msg) -> Array (Svg msg) -> Svg msg
+linearGradient =
+  trustedNode "linearGradient"
+
+
+{-|-}
+radialGradient : Array (Attribute msg) -> Array (Svg msg) -> Svg msg
+radialGradient =
+  trustedNode "radialGradient"
+
+
+{-|-}
+stop : Array (Attribute msg) -> Array (Svg msg) -> Svg msg
+stop =
+  trustedNode "stop"
+
+
+
+-- Graphics elements
+
+
+{-| The circle element is an SVG basic shape, used to create circles based on
+a center point and a radius.
+
+    circle [ cx "60", cy "60", r "50" ] []
+-}
+circle : Array (Attribute msg) -> Array (Svg msg) -> Svg msg
+circle =
+  trustedNode "circle"
+
+
+{-|-}
+ellipse : Array (Attribute msg) -> Array (Svg msg) -> Svg msg
+ellipse =
+  trustedNode "ellipse"
+
+
+{-|-}
+image : Array (Attribute msg) -> Array (Svg msg) -> Svg msg
+image =
+  trustedNode "image"
+
+
+{-|-}
+line : Array (Attribute msg) -> Array (Svg msg) -> Svg msg
+line =
+  trustedNode "line"
+
+
+{-|-}
+path : Array (Attribute msg) -> Array (Svg msg) -> Svg msg
+path =
+  trustedNode "path"
+
+
+{-|-}
+polygon : Array (Attribute msg) -> Array (Svg msg) -> Svg msg
+polygon =
+  trustedNode "polygon"
+
+
+{-| The polyline element is an SVG basic shape, used to create a series of
+straight lines connecting several points. Typically a polyline is used to
+create open shapes.
+
+    polyline [ fill "none", stroke "black", points "20,100 40,60 70,80 100,20" ] []
+-}
+polyline : Array (Attribute msg) -> Array (Svg msg) -> Svg msg
+polyline =
+  trustedNode "polyline"
+
+
+{-|-}
+rect : Array (Attribute msg) -> Array (Svg msg) -> Svg msg
+rect =
+  trustedNode "rect"
+
+
+{-|-}
+use : Array (Attribute msg) -> Array (Svg msg) -> Svg msg
+use =
+  trustedNode "use"
+
+
+
+-- Light source elements
+
+
+{-|-}
+feDistantLight : Array (Attribute msg) -> Array (Svg msg) -> Svg msg
+feDistantLight =
+  trustedNode "feDistantLight"
+
+
+{-|-}
+fePointLight : Array (Attribute msg) -> Array (Svg msg) -> Svg msg
+fePointLight =
+  trustedNode "fePointLight"
+
+
+{-|-}
+feSpotLight : Array (Attribute msg) -> Array (Svg msg) -> Svg msg
+feSpotLight =
+  trustedNode "feSpotLight"
+
+
+-- Text content elements
+
+
+{-|-}
+altGlyph : Array (Attribute msg) -> Array (Svg msg) -> Svg msg
+altGlyph =
+  trustedNode "altGlyph"
+
+
+{-|-}
+altGlyphDef : Array (Attribute msg) -> Array (Svg msg) -> Svg msg
+altGlyphDef =
+  trustedNode "altGlyphDef"
+
+
+{-|-}
+altGlyphItem : Array (Attribute msg) -> Array (Svg msg) -> Svg msg
+altGlyphItem =
+  trustedNode "altGlyphItem"
+
+
+{-|-}
+glyph : Array (Attribute msg) -> Array (Svg msg) -> Svg msg
+glyph =
+  trustedNode "glyph"
+
+
+{-|-}
+glyphRef : Array (Attribute msg) -> Array (Svg msg) -> Svg msg
+glyphRef =
+  trustedNode "glyphRef"
+
+
+{-|-}
+textPath : Array (Attribute msg) -> Array (Svg msg) -> Svg msg
+textPath =
+  trustedNode "textPath"
+
+
+{-|-}
+text_ : Array (Attribute msg) -> Array (Svg msg) -> Svg msg
+text_ =
+  trustedNode "text"
+
+
+{-|-}
+tref : Array (Attribute msg) -> Array (Svg msg) -> Svg msg
+tref =
+  trustedNode "tref"
+
+
+{-|-}
+tspan : Array (Attribute msg) -> Array (Svg msg) -> Svg msg
+tspan =
+  trustedNode "tspan"
+
+
+-- Uncategorized elements
+
+
+{-|-}
+clipPath : Array (Attribute msg) -> Array (Svg msg) -> Svg msg
+clipPath =
+  trustedNode "clipPath"
+
+
+{-|-}
+colorProfile : Array (Attribute msg) -> Array (Svg msg) -> Svg msg
+colorProfile =
+  trustedNode "colorProfile"
+
+
+{-|-}
+cursor : Array (Attribute msg) -> Array (Svg msg) -> Svg msg
+cursor =
+  trustedNode "cursor"
+
+
+{-|-}
+filter : Array (Attribute msg) -> Array (Svg msg) -> Svg msg
+filter =
+  trustedNode "filter"
+
+
+{-|-}
+style : Array (Attribute msg) -> Array (Svg msg) -> Svg msg
+style =
+  trustedNode "style"
+
+
+{-|-}
+view : Array (Attribute msg) -> Array (Svg msg) -> Svg msg
+view =
+  trustedNode "view"
+
+
