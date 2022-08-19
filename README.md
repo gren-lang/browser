@@ -2,7 +2,6 @@
 
 This package allows you to create Gren programs that run in browsers.
 
-
 ## Learning Path
 
 **I highly recommend working through [gren-lang.org/learn][guide] to learn how to use Gren.** It is built around a learning path that introduces concepts gradually.
@@ -11,10 +10,10 @@ This package allows you to create Gren programs that run in browsers.
 
 You can see the outline of that learning path in the `Browser` module. It lets you create Gren programs with the following functions:
 
-  1. [`sandbox`](https://package.elm-lang.org/packages/elm/browser/latest/Browser#sandbox) &mdash; react to user input, like buttons and checkboxes
-  2. [`element`](https://package.elm-lang.org/packages/elm/browser/latest/Browser#element) &mdash; talk to the outside world, like HTTP and JS interop
-  3. [`document`](https://package.elm-lang.org/packages/elm/browser/latest/Browser#document) &mdash; control the `<title>` and `<body>`
-  4. [`application`](https://package.elm-lang.org/packages/elm/browser/latest/Browser#application) &mdash; create single-page apps
+1. [`sandbox`](https://package.elm-lang.org/packages/elm/browser/latest/Browser#sandbox) &mdash; react to user input, like buttons and checkboxes
+2. [`element`](https://package.elm-lang.org/packages/elm/browser/latest/Browser#element) &mdash; talk to the outside world, like HTTP and JS interop
+3. [`document`](https://package.elm-lang.org/packages/elm/browser/latest/Browser#document) &mdash; control the `<title>` and `<body>`
+4. [`application`](https://package.elm-lang.org/packages/elm/browser/latest/Browser#application) &mdash; create single-page apps
 
 This order works well because important concepts and techniques are introduced at each stage. If you jump ahead, it is like building a house by starting with the roof!
 

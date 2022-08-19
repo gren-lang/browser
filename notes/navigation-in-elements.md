@@ -6,7 +6,6 @@ But at some companies the element has grown to manage _almost_ the whole page. E
 
 What do you do?
 
-
 ## Managing the URL from `Browser.element`
 
 You would initialize your element like this:
@@ -14,19 +13,19 @@ You would initialize your element like this:
 ```javascript
 // Initialize your Gren program
 var app = Gren.Main.init({
-    flags: location.href,
-    node: document.getElementById('gren-main')
+  flags: location.href,
+  node: document.getElementById("gren-main"),
 });
 
 // Inform app of browser navigation (the BACK and FORWARD buttons)
-window.addEventListener('popstate', function () {
-    app.ports.onUrlChange.send(location.href);
+window.addEventListener("popstate", function () {
+  app.ports.onUrlChange.send(location.href);
 });
 
 // Change the URL upon request, inform app of the change.
-app.ports.pushUrl.subscribe(function(url) {
-    history.pushState({}, '', url);
-    app.ports.onUrlChange.send(location.href);
+app.ports.pushUrl.subscribe(function (url) {
+  history.pushState({}, "", url);
+  app.ports.onUrlChange.send(location.href);
 });
 ```
 
@@ -93,11 +92,9 @@ locationHrefToRoute locationHref =
 
 So in contrast with `Browser.application`, you have to manage the URL yourself in JavaScript. What is up with that?!
 
-
 ## Justification
 
 The justification is that (1) this will lead to more reliable programs overall and (2) other designs do not save significant amounts of code. We will explore both in order.
-
 
 ### Reliability
 
@@ -108,7 +105,6 @@ For URL management to work here, all three of these things need to agree on what
 If each project was reacting to the URL internally, synchronization bugs would inevitably arise. Maybe it was a static page, but it upgraded to have the URL change. You added that to your Gren, but what about the Angular and React elements. What happens to them? Probably people forget and it is just a confusing bug. So having one `popstate` makes it obvious that there is a decision to make here. And what happens when React starts producing URLs that Angular and Gren have never heard of? Do those elements show some sort of 404 page?
 
 > **Note:** If you wanted you could send the `location.href` into a `Platform.worker` to do the URL parsing in Gren. Once you have nice data, you could send it out a port for all the different elements on your page.
-
 
 ### Lines of Code
 
@@ -177,7 +173,6 @@ So the main differences are:
 4. `link` becomes `onUrlRequest` and handling code in `update` (depends)
 
 So we are talking about maybe twenty lines of code that go away in the `application` version? And each line has a very clear purpose, allowing you to customize and synchronize based on your exact application. Maybe you only want the hash because you support certain IE browsers? Change the `popstate` listener to `hashchange`. Maybe you only want the last two segments of the URL because the rest is managed in React? Change `locationHrefToRoute` to be `whateverToRoute` based on what you need. Etc.
-
 
 ### Summary
 

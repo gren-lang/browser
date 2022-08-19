@@ -1,6 +1,6 @@
 # Which key was pressed?
 
-When you're listening for global keyboard events, you very likely want to know *which* key was pressed. Unfortunately different browsers implement the [`KeyboardEvent`][ke] values in different ways, so there is no one-size-fits-all solution.
+When you're listening for global keyboard events, you very likely want to know _which_ key was pressed. Unfortunately different browsers implement the [`KeyboardEvent`][ke] values in different ways, so there is no one-size-fits-all solution.
 
 [ke]: https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent
 
@@ -11,7 +11,6 @@ As of this writing, it seems that the `KeyboardEvent` API recommends using [`key
 [key]: https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/key
 
 According to [the docs][ke], everything else is deprecated. So `charCode`, `keyCode`, and `which` are only useful if you need to support browsers besides [these](http://caniuse.com/#feat=keyboardevent-key).
-
 
 ## Writing a `key` decoder
 
@@ -26,7 +25,6 @@ keyDecoder =
 ```
 
 Depending on your scenario, you may want something more elaborate though!
-
 
 ### Decoding for User Input
 
@@ -54,7 +52,6 @@ toKey string =
 ```
 
 > **Note:** The `String.uncons` function chomps surrogate pairs properly, so it works with characters outside of the BMP. If that does not mean anything to you, you are lucky! In summary, a tricky character encoding problem of JavaScript is taken care of with this code and you do not need to worry about it. Congratulations!
-
 
 ### Decoding for Games
 
