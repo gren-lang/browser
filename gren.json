@@ -1,5 +1,6 @@
 {
     "type": "package",
+    "platform": "browser",
     "name": "gren-lang/browser",
     "summary": "Run Gren in browsers",
     "license": "BSD-3-Clause",
