@@ -106,9 +106,9 @@ onSelfMsg router newTime { subs, oldTime } =
 
 rAF : Task x Int
 rAF =
-    Gren.Kernel.Browser.rAF Unit
+    Gren.Kernel.Browser.rAF {}
 
 
 now : Task x Int
 now =
-    Gren.Kernel.Browser.now Unit
+    Gren.Kernel.Browser.now {}

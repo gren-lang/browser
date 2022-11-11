@@ -222,7 +222,7 @@ different tab or window. When the user looks away, you may want to:
 onVisibilityChange : (Visibility -> msg) -> Sub msg
 onVisibilityChange func =
   let
-    info = Gren.Kernel.Browser.visibilityInfo Unit
+    info = Gren.Kernel.Browser.visibilityInfo {}
   in
   on Document info.change <|
     Decode.map (withHidden func) <|

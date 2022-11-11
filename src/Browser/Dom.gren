@@ -96,7 +96,7 @@ as an `id` by any node, failing silently in that case. It would be better to
 log the failure with whatever error reporting system you use.
 
 -}
-focus : String -> Task Error Unit
+focus : String -> Task Error {}
 focus =
     Gren.Kernel.Browser.call "focus"
 
@@ -119,7 +119,7 @@ as an `id` by any node, failing silently in that case. It would be better to
 log the failure with whatever error reporting system you use.
 
 -}
-blur : String -> Task Error Unit
+blur : String -> Task Error {}
 blur =
     Gren.Kernel.Browser.call "blur"
 
@@ -245,7 +245,7 @@ the viewport when the URL changes. Maybe you go to a &ldquo;new page&rdquo;
 and want people to start at the top!
 
 -}
-setViewport : Float -> Float -> Task x Unit
+setViewport : Float -> Float -> Task x {}
 setViewport =
     Gren.Kernel.Browser.setViewport
 
@@ -281,7 +281,7 @@ be great to log that information. It means there may be a bug or a dead link
 somewhere!
 
 -}
-setViewportOf : String -> Float -> Float -> Task Error Unit
+setViewportOf : String -> Float -> Float -> Task Error {}
 setViewportOf =
     Gren.Kernel.Browser.setViewportOf
 
@@ -314,12 +314,12 @@ around everywhere is probably annoying.
 
 [sb]: https://developer.mozilla.org/en-US/docs/Web/CSS/scroll-behavior
 -}
-slideViewport : Float -> Float -> Task x Unit
+slideViewport : Float -> Float -> Task x {}
 slideViewport =
   Debug.todo "slideViewport"
 
 
-slideViewportOf : String -> Float -> Float -> Task Error Unit
+slideViewportOf : String -> Float -> Float -> Task Error {}
 slideViewportOf =
   Debug.todo "slideViewportOf"
 

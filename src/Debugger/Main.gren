@@ -147,20 +147,20 @@ cachedHistory model =
 wrapInit : Encode.Value -> Popout -> (flags -> { model : model, command : Cmd msg }) -> flags -> { model : Model model msg, command : Cmd (Msg msg) }
 wrapInit metadata popout init flags =
   let
-    { model = userModel, command = userCommands } = 
+    { model = userModel, command = userCommands } =
         init flags
   in
   { model =
     { history = History.empty userModel
     , state = Running userModel
     , expandoModel = Expando.init userModel
-    , expandoMsg = Expando.init Unit
+    , expandoMsg = Expando.init {}
     , metadata = Metadata.decode metadata
     , overlay = Overlay.none
     , popout = popout
     , layout = Horizontal Static 0.3 0.5
     }
-  , command = 
+  , command =
     Cmd.map UserMsg userCommands
   }
 
@@ -200,7 +200,7 @@ wrapUpdate update msg model =
   case msg of
     NoOp ->
       { model = model
-      , command = Cmd.none 
+      , command = Cmd.none
       }
 
     UserMsg userMsg ->
@@ -212,7 +212,7 @@ wrapUpdate update msg model =
         in
         case model.state of
           Running _ ->
-            { model = 
+            { model =
                 { model
                     | history = newHistory
                     , state = Running newUserModel
@@ -464,7 +464,7 @@ loadNewHistory rawHistory update model =
                     , expandoMsg = Expando.init (History.getRecentMsg newHistory)
                     , overlay = Overlay.none
                   }
-            , command = 
+            , command =
                 Cmd.none
             }
 
@@ -563,7 +563,7 @@ type alias DragInfo =
 onMouseMove : Attribute (Msg msg)
 onMouseMove =
   on "mousemove" <| Decode.map Drag <|
-    Decode.map5 
+    Decode.map5
       (\x y down width height ->
         { x = x
         , y = y

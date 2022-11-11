@@ -375,7 +375,7 @@ viewRecord maybeKey isClosed record =
       else
         { start = [ text "{" ]
         , middle = viewRecordOpen record
-        , end = div (leftPad (Just Unit)) [ text "}" ]
+        , end = div (leftPad (Just {})) [ text "}" ]
         }
   in
   div (leftPad maybeKey)
@@ -406,13 +406,13 @@ viewConstructor maybeKey maybeName isClosed valueArray =
 
     description =
       case { maybeName = maybeName, vals = Array.popFirst tinyArgs } of
-        { maybeName = Nothing, vals = Nothing } -> 
+        { maybeName = Nothing, vals = Nothing } ->
             [ text "()" ]
-        { maybeName = Nothing, vals = Just { first = x, rest = xs } } -> 
+        { maybeName = Nothing, vals = Just { first = x, rest = xs } } ->
             [text "( ", span [] x] ++ Array.foldr (\args rest -> [text ", ", span [] args] ++ rest) [ text " )" ] xs
-        { maybeName = Just name, vals = Nothing } -> 
+        { maybeName = Just name, vals = Nothing } ->
             [ text name ]
-        { maybeName = Just name, vals = Just { first = x, rest = xs } } -> 
+        { maybeName = Just name, vals = Just { first = x, rest = xs } } ->
             [text (name ++ " "), span [] x] ++ Array.foldr (\args rest -> [text " ", span [] args] ++ rest) [] xs
 
     { maybeIsClosed, openHtml } =
@@ -430,9 +430,9 @@ viewConstructor maybeKey maybeName isClosed valueArray =
 
               Sequence _ _ subValueArray ->
                 { maybeIsClosed = Just isClosed
-                , openHtml = 
-                    if isClosed then 
-                        div [] [] 
+                , openHtml =
+                    if isClosed then
+                        div [] []
                     else
                         Html.map (Index None 0) (viewSequenceOpen subValueArray)
                 }
@@ -451,9 +451,9 @@ viewConstructor maybeKey maybeName isClosed valueArray =
 
               Constructor _ _ subValueArray ->
                 { maybeIsClosed = Just isClosed
-                , openHtml = 
-                  if isClosed then 
-                    div [] [] 
+                , openHtml =
+                  if isClosed then
+                    div [] []
                   else
                     Html.map (Index None 0) (viewConstructorOpen subValueArray)
                 }
@@ -509,7 +509,7 @@ viewTiny value =
       viewTinyRecord record
 
     Constructor maybeName _ [] ->
-      viewTinyHelp <| Maybe.withDefault "Unit" maybeName
+      viewTinyHelp <| Maybe.withDefault "{}" maybeName
 
     Constructor maybeName _ valueArray ->
       viewTinyHelp <|
@@ -546,7 +546,7 @@ viewTinyRecordHelp : Int -> String -> Array { key : String, value : Expando } ->
 viewTinyRecordHelp length starter entries =
   case Array.popFirst entries of
     Nothing ->
-        { index = length + 2, nodes = [ text " }" ] } 
+        { index = length + 2, nodes = [ text " }" ] }
 
     Just { first = { key = field, value }, rest } ->
       let

@@ -1,6 +1,6 @@
 /*
 
-import Basics exposing (Unit, never)
+import Basics exposing (never)
 import Browser exposing (Internal, External)
 import Browser.Dom as Dom exposing (NotFound)
 import Gren.Kernel.Debug exposing (crash)
@@ -320,7 +320,7 @@ function _Browser_withWindow(doStuff) {
 var _Browser_call = F2(function (functionName, id) {
   return _Browser_withNode(id, function (node) {
     node[functionName]();
-    return __Basics_Unit;
+    return {};
   });
 });
 
@@ -362,7 +362,7 @@ function _Browser_getScene() {
 var _Browser_setViewport = F2(function (x, y) {
   return _Browser_withWindow(function () {
     _Browser_window.scroll(x, y);
-    return __Basics_Unit;
+    return {};
   });
 });
 
@@ -389,7 +389,7 @@ var _Browser_setViewportOf = F3(function (id, x, y) {
   return _Browser_withNode(id, function (node) {
     node.scrollLeft = x;
     node.scrollTop = y;
-    return __Basics_Unit;
+    return {};
   });
 });
 
