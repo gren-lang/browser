@@ -1,6 +1,6 @@
 /*
 
-import Basics exposing (identity)
+import Gren.Kernel.Utils exposing (eq)
 import Gren.Kernel.Debug exposing (crash)
 import Gren.Kernel.Json exposing (equality, runHelp, unwrap)
 import Gren.Kernel.Platform exposing (export)
@@ -125,59 +125,60 @@ var _VirtualDom_map = F2(function (tagger, node) {
 
 // LAZY
 
-function _VirtualDom_thunk(refs, thunk) {
+function _VirtualDom_thunk(view, args, thunk) {
   return {
     $: __2_THUNK,
-    __refs: refs,
+    __view: view,
+    __args: args,
     __thunk: thunk,
     __node: undefined,
   };
 }
 
 var _VirtualDom_lazy = F2(function (func, a) {
-  return _VirtualDom_thunk([func, a], function () {
+  return _VirtualDom_thunk(func, [a], function () {
     return func(a);
   });
 });
 
 var _VirtualDom_lazy2 = F3(function (func, a, b) {
-  return _VirtualDom_thunk([func, a, b], function () {
+  return _VirtualDom_thunk(func, [a, b], function () {
     return A2(func, a, b);
   });
 });
 
 var _VirtualDom_lazy3 = F4(function (func, a, b, c) {
-  return _VirtualDom_thunk([func, a, b, c], function () {
+  return _VirtualDom_thunk(func, [a, b, c], function () {
     return A3(func, a, b, c);
   });
 });
 
 var _VirtualDom_lazy4 = F5(function (func, a, b, c, d) {
-  return _VirtualDom_thunk([func, a, b, c, d], function () {
+  return _VirtualDom_thunk(func, [a, b, c, d], function () {
     return A4(func, a, b, c, d);
   });
 });
 
 var _VirtualDom_lazy5 = F6(function (func, a, b, c, d, e) {
-  return _VirtualDom_thunk([func, a, b, c, d, e], function () {
+  return _VirtualDom_thunk(func, [a, b, c, d, e], function () {
     return A5(func, a, b, c, d, e);
   });
 });
 
 var _VirtualDom_lazy6 = F7(function (func, a, b, c, d, e, f) {
-  return _VirtualDom_thunk([func, a, b, c, d, e, f], function () {
+  return _VirtualDom_thunk(func, [a, b, c, d, e, f], function () {
     return A6(func, a, b, c, d, e, f);
   });
 });
 
 var _VirtualDom_lazy7 = F8(function (func, a, b, c, d, e, f, g) {
-  return _VirtualDom_thunk([func, a, b, c, d, e, f, g], function () {
+  return _VirtualDom_thunk(func, [a, b, c, d, e, f, g], function () {
     return A7(func, a, b, c, d, e, f, g);
   });
 });
 
 var _VirtualDom_lazy8 = F9(function (func, a, b, c, d, e, f, g, h) {
-  return _VirtualDom_thunk([func, a, b, c, d, e, f, g, h], function () {
+  return _VirtualDom_thunk(func, [a, b, c, d, e, f, g, h], function () {
     return A8(func, a, b, c, d, e, f, g, h);
   });
 });
@@ -635,12 +636,12 @@ function _VirtualDom_diffHelp(x, y, patches, index) {
   // Now we know that both nodes are the same $.
   switch (yType) {
     case __2_THUNK:
-      var xRefs = x.__refs;
-      var yRefs = y.__refs;
-      var i = xRefs.length;
-      var same = i === yRefs.length;
+      var xArgs = x.__args;
+      var yArgs = y.__args;
+      var i = xArgs.length;
+      var same = i === yArgs.length && x.__view === y.__view;
       while (same && i--) {
-        same = xRefs[i] === yRefs[i];
+        same = __Utils_eq(xArgs[i], yArgs[i]);
       }
       if (same) {
         y.__node = x.__node;
@@ -649,8 +650,7 @@ function _VirtualDom_diffHelp(x, y, patches, index) {
       y.__node = y.__thunk();
       var subPatches = [];
       _VirtualDom_diffHelp(x.__node, y.__node, subPatches, 0);
-      subPatches.length > 0 &&
-        _VirtualDom_pushPatch(patches, __3_THUNK, index, subPatches);
+      subPatches.length > 0 && _VirtualDom_pushPatch(patches, __3_THUNK, index, subPatches);
       return;
 
     case __2_TAGGER:
