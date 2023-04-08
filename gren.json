@@ -1,33 +1,32 @@
 {
-  "type": "package",
-  "platform": "browser",
-  "name": "gren-lang/browser",
-  "summary": "Run Gren in browsers",
-  "license": "BSD-3-Clause",
-  "version": "2.0.0",
-  "exposed-modules": [
-    "Browser",
-    "Browser.Dom",
-    "Browser.Events",
-    "Browser.Navigation",
-    "File",
-    "Http",
-    "VirtualDom",
-    "Html",
-    "Html.Attributes",
-    "Html.Events",
-    "Html.Keyed",
-    "Html.Lazy",
-    "Svg",
-    "Svg.Attributes",
-    "Svg.Events",
-    "Svg.Keyed",
-    "Svg.Lazy"
-  ],
-  "gren-version": "0.2.0 <= v < 0.3.0",
-  "dependencies": {
-    "gren-lang/core": "3.0.2 <= v < 4.0.0",
-    "gren-lang/url": "2.0.1 <= v < 3.0.0"
-  },
-  "test-dependencies": {}
+    "type": "package",
+    "platform": "browser",
+    "name": "gren-lang/browser",
+    "summary": "Run Gren in browsers",
+    "license": "BSD-3-Clause",
+    "version": "2.0.1",
+    "exposed-modules": [
+        "Browser",
+        "Browser.Dom",
+        "Browser.Events",
+        "Browser.Navigation",
+        "File",
+        "Http",
+        "VirtualDom",
+        "Html",
+        "Html.Attributes",
+        "Html.Events",
+        "Html.Keyed",
+        "Html.Lazy",
+        "Svg",
+        "Svg.Attributes",
+        "Svg.Events",
+        "Svg.Keyed",
+        "Svg.Lazy"
+    ],
+    "gren-version": "0.2.0 <= v < 0.3.0",
+    "dependencies": {
+        "gren-lang/core": "3.0.2 <= v < 4.0.0",
+        "gren-lang/url": "2.0.1 <= v < 3.0.0"
+    }
 }
