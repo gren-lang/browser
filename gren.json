@@ -4,7 +4,7 @@
     "name": "gren-lang/browser",
     "summary": "Run Gren in browsers",
     "license": "BSD-3-Clause",
-    "version": "2.0.1",
+    "version": "3.0.0",
     "exposed-modules": [
         "Browser",
         "Browser.Dom",
@@ -24,9 +24,9 @@
         "Svg.Keyed",
         "Svg.Lazy"
     ],
-    "gren-version": "0.2.0 <= v < 0.3.0",
+    "gren-version": "0.3.0 <= v < 0.4.0",
     "dependencies": {
-        "gren-lang/core": "3.0.2 <= v < 4.0.0",
-        "gren-lang/url": "2.0.1 <= v < 3.0.0"
+        "gren-lang/core": "4.0.0 <= v < 5.0.0",
+        "gren-lang/url": "3.0.0 <= v < 4.0.0"
     }
 }
