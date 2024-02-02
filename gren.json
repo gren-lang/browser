@@ -11,6 +11,8 @@
         "Browser.Events",
         "Browser.Navigation",
         "File",
+        "File.Download",
+        "File.Select",
         "Http",
         "VirtualDom",
         "Html",
