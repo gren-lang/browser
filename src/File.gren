@@ -36,7 +36,7 @@ import Time
 
 
 {-| Represents an uploaded file. From there you can read the content, check
-the metadata, send it over [`gren/http`](/packages/gren/http/latest), etc.
+the metadata, send it over [`gren/http`](Http), etc.
 -}
 type File = File
 
@@ -53,7 +53,7 @@ file uploader, you can listen for `drop` events with a decoder like this:
 
 Once you have the files, you can use functions like [`File.toString`](#toString)
 to process the content. Or you can send the file along to someone else with the
-[`gren/http`](/packages/gren/http/latest) package.
+[`gren/http`](Http) package.
 -}
 decoder : Decode.Decoder File
 decoder =
@@ -79,7 +79,7 @@ file you could read the content like this:
 
 Reading the content is asynchronous because browsers want to avoid allocating
 the file content into memory if possible. (E.g. if you are just sending files
-along to a server with [`gren/http`](/packages/gren/http/latest) there is no
+along to a server with [`gren/http`](Http) there is no
 point having their content in memory!)
 -}
 toString : File -> Task x String
@@ -101,7 +101,7 @@ file you could read the content like this:
     read file =
       Task.perform ZipLoaded (File.toBytes file)
 
-From here you can use the [`gren/bytes`](/packages/gren/bytes/latest) package to
+From here you can use the [`gren/bytes`](/package/core/latest/Overview#bytes) package to
 work with the bytes and turn them into whatever you want.
 -}
 toBytes : File -> Task x Bytes
@@ -172,7 +172,7 @@ size =
     lastModified file3 -- 1340375405
 
 Learn more about how time is represented by reading through the
-[`gren/time`](/packages/gren/time/latest) package!
+[`gren/time`](/package/gren-lang/time) package!
 -}
 lastModified : File -> Time.Posix
 lastModified =
