@@ -197,10 +197,10 @@ reading a calculus book from page 314, it might seem confusing. Same here!
 **Note:** Can an [`element`](#element) manage the URL too? Read [this]!
 
 [g]: https://guide.gren-lang.org/
-[bn]: Browser-Navigation
-[bnp]: Browser-Navigation#pushUrl
-[bnl]: Browser-Navigation#load
-[url]: /packages/gren-lang/url/latest/Url#Url
+[bn]: Browser.Navigation
+[bnp]: Browser.Navigation#pushUrl
+[bnl]: Browser.Navigation#load
+[url]: /package/gren-lang/url/latest/module/Url#Url
 [this]: https://github.com/gren-lang/browser/blob/1.0.2/notes/navigation-in-elements.md
 
 -}
@@ -271,7 +271,7 @@ Having a `UrlRequest` requires a case in your `update` like this:
 
 This is useful because it gives you a chance to customize the behavior in each
 case. Maybe on some `Internal` links you save the scroll position with
-[`Browser.Dom.getViewport`](Browser-Dom#getViewport) so you can restore it
+[`Browser.Dom.getViewport`](Browser.Dom#getViewport) so you can restore it
 later. Maybe on `External` links you persist parts of the `Model` on your
 servers before leaving. Whatever you need to do!
 
@@ -280,7 +280,7 @@ browser dimensions change? The scroll position will not correlate with
 &ldquo;what was on screen&rdquo; anymore. So it may be better to remember
 &ldquo;what was on screen&rdquo; and recreate the position based on that. For
 example, in a Wikipedia article, remember the header that they were looking at
-most recently. [`Browser.Dom.getElement`](Browser-Dom#getElement) is designed
+most recently. [`Browser.Dom.getElement`](Browser.Dom#getElement) is designed
 for figuring that out!
 
 -}

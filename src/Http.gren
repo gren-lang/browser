@@ -79,7 +79,7 @@ You can use functions like [`expectString`](#expectString) and
 this example, we are expecting the response body to be a `String` containing
 the full text of _Public Opinion_ by Walter Lippmann.
 
-**Note:** Use [`gren-lang/url`](/packages/gren-lang/url/latest) to build reliable URLs.
+**Note:** Use [`gren-lang/url`](/package/gren-lang/url) to build reliable URLs.
 -}
 get
   : { url : String
@@ -272,7 +272,7 @@ stringBody =
 
 
 {-| Put some `Bytes` in the body of your `Request`. This allows you to use
-[`gren-lang/bytes`](/packages/gren-lang/bytes/latest) to have full control over the binary
+[`gren-lang/bytes`](/package/gren-lang/bytes) to have full control over the binary
 representation of the data you are sending. For example, you could create an
 `archive.zip` file and send it along like this:
 
@@ -294,7 +294,7 @@ bytesBody =
 
 
 {-| Use a file as the body of your `Request`. When someone uploads an image
-into the browser with [`gren-lang/file`](/packages/gren-lang/file/latest) you can forward
+into the browser with [`gren-lang/file`](File) you can forward
 it to a server.
 
 This will automatically set the `Content-Type` to the MIME type of the file.
