@@ -12,25 +12,25 @@ listeners on those objects for the following topics: [animation](#animation),
 
 If there is something else you need, use [ports] to do it in JavaScript!
 
-[ports]: https://guide.gren-lang.org/interop/ports.html
+[ports]: https://guide.elm-lang.org/interop/ports.html
 
 
-# Animation
+## Animation
 
 @docs onAnimationFrame, onAnimationFrameDelta
 
 
-# Keyboard
+## Keyboard
 
 @docs onKeyPress, onKeyDown, onKeyUp
 
 
-# Mouse
+## Mouse
 
 @docs onClick, onMouseMove, onMouseDown, onMouseUp
 
 
-# Window
+## Window
 
 @docs onResize, onVisibilityChange, Visibility
 

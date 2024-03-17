@@ -5,13 +5,11 @@ module Svg.Events exposing
 
 {-|
 
-
-# Mouse
+## Mouse
 
 @docs onClick, onMouseDown, onMouseUp, onMouseOver, onMouseOut
 
-
-# Custom
+## Custom
 
 @docs on, stopPropagationOn, preventDefaultOn, custom
 
@@ -77,7 +75,7 @@ When an event occurs, the decoder tries to turn the event object into an Gren
 value. If successful, the value is routed to your `update` function. In the
 case of `onClick` we always just succeed with the given `message`.
 
-If this is confusing, work through the [Gren Architecture Tutorial][gren-architecture-tutorial].
+If this is confusing, work through the [Elm Architecture Tutorial][elm-architecture-tutorial].
 It really helps!
 
 [aEL]: https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener
@@ -86,7 +84,7 @@ It really helps!
 TODO: Update urls:
 -->
 [decoder]: /packages/gren-lang/json/latest/Json-Decode
-[gren-architecture-tutorial]: https://github.com/evancz/elm-architecture-tutorial/
+[elm-architecture-tutorial]: https://github.com/evancz/elm-architecture-tutorial/
 
 **Note:** This creates a [passive] event listener, enabling optimizations for
 touch, scroll, and wheel events in some browsers.

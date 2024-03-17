@@ -9,26 +9,22 @@ module Html.Events exposing
   , targetValue, targetChecked, keyCode
   )
 
-{-|
-It is often helpful to create an [Custom Type][] so you can have many different kinds
+{-| It is often helpful to create an [Custom Type][] so you can have many different kinds
 of events as seen in the [TodoMVC][] example.
 
-[Custom Type]: https://guide.elm-lang.org/types/custom_types.html
-[TodoMVC]: https://github.com/evancz/elm-todomvc/blob/master/Todo.elm
+[Custom Type]: https://gren-lang.org/book/syntax/custom_types.html
+[TodoMVC]: https://github.com/gren-lang/example-projects/tree/main/todo_mvc 
 
-# Mouse
-@docs onClick, onDoubleClick,
-      onMouseDown, onMouseUp,
-      onMouseEnter, onMouseLeave,
-      onMouseOver, onMouseOut
+## Mouse
+@docs onClick, onDoubleClick, onMouseDown, onMouseUp, onMouseEnter, onMouseLeave, onMouseOver, onMouseOut
 
-# Forms
+## Forms
 @docs onInput, onCheck, onSubmit
 
-# Focus
+## Focus
 @docs onBlur, onFocus
 
-# Custom
+## Custom
 @docs on, stopPropagationOn, preventDefaultOn, custom
 
 ## Custom Decoders
@@ -189,7 +185,7 @@ When an event occurs, the decoder tries to turn the event object into an Gren
 value. If successful, the value is routed to your `update` function. In the
 case of `onClick` we always just succeed with the given `message`.
 
-If this is confusing, work through the [Gren Architecture Tutorial][tutorial].
+If this is confusing, work through the [Elm Architecture Tutorial][tutorial].
 It really helps!
 
 [aEL]: https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener

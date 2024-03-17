@@ -41,10 +41,8 @@ module Svg.Attributes exposing
     , wordSpacing, writingMode
     )
 
-{-|
+{-| Common attributes for SVG elements
 
-
-# Regular attributes
 
 @docs accentHeight, accelerate, accumulate, additive, alphabetic, allowReorder
 @docs amplitude, arabicForm, ascent, attributeName, attributeType, autoReverse
@@ -76,7 +74,7 @@ module Svg.Attributes exposing
 @docs xmlBase, xmlLang, xmlSpace, y, y1, y2, yChannelSelector, z, zoomAndPan
 
 
-# Presentation attributes
+## Presentation attributes
 
 @docs alignmentBaseline, baselineShift, clipPath, clipRule, clip
 @docs colorInterpolationFilters, colorInterpolation, colorProfile, colorRendering

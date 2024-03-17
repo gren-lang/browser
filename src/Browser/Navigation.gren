@@ -32,12 +32,12 @@ you can show a loading bar, show information as it loads, etc. Whatever you
 want!
 
 
-# Navigate within Page
+## Navigate within Page
 
 @docs Key, pushUrl, replaceUrl, back, forward
 
 
-# Navigate to other Pages
+## Navigate to other Pages
 
 @docs load, reload, reloadAndSkipCache
 

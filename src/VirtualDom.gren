@@ -11,22 +11,22 @@ module VirtualDom exposing
 {-| API to the core diffing algorithm. Can serve as a foundation for libraries
 that expose more helper functions for HTML or SVG.
 
-# Create
+## Create
 @docs Node, text, node, nodeNS
 
-# Attributes
+## Attributes
 @docs Attribute, style, property, attribute, attributeNS
 
-# Events
+## Events
 @docs on, Handler
 
-# Routing Messages
+## Routing Messages
 @docs map, mapAttribute
 
-# Keyed Nodes
+## Keyed Nodes
 @docs keyedNode, keyedNodeNS
 
-# Lazy Nodes
+## Lazy Nodes
 @docs lazy, lazy2, lazy3, lazy4, lazy5, lazy6, lazy7, lazy8
 
 -}
@@ -83,7 +83,7 @@ text =
   Gren.Kernel.VirtualDom.text
 
 
-{-| This function is useful when nesting components with [the Gren
+{-| This function is useful when nesting components with [the Elm
 Architecture](https://github.com/evancz/elm-architecture-tutorial/). It lets
 you transform the messages produced by a subtree.
 

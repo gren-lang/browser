@@ -16,7 +16,7 @@ module Browser.Dom exposing
 We use different terminology than JavaScript though...
 
 
-# Terminology
+## Terminology
 
 Have you ever thought about how &ldquo;scrolling&rdquo; is a metaphor about
 scrolls? Like hanging scrolls of caligraphy made during the Han Dynasty

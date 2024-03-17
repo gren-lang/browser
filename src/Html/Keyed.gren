@@ -3,6 +3,8 @@ module Html.Keyed exposing
   , ol
   , ul
   )
+
+
 {-| A keyed node helps optimize cases where children are getting added, moved,
 removed, etc. Common examples include:
 
@@ -14,10 +16,10 @@ When you use a keyed node, every child is paired with a string identifier. This
 makes it possible for the underlying diffing algorithm to reuse nodes more
 efficiently.
 
-# Keyed Nodes
+## Keyed Nodes
 @docs node
 
-# Commonly Keyed Nodes
+## Commonly Keyed Nodes
 @docs ol, ul
 -}
 

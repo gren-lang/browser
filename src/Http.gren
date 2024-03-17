@@ -13,34 +13,33 @@ effect module Http where { command = MyCmd, subscription = MySub } exposing
 
 {-| Send HTTP requests.
 
-# Requests
 @docs get, post, request
 
-# Header
+## Header
 @docs Header, header
 
-# Body
+## Body
 @docs Body, emptyBody, stringBody, jsonBody, fileBody, bytesBody
 
-# Body Parts
+## Body Parts
 @docs multipartBody, Part, stringPart, filePart, bytesPart
 
-# Expect
+## Expect
 @docs Expect, expectString, expectJson, expectBytes, expectWhatever, Error
 
-# Progress
+## Progress
 @docs track, Progress, fractionSent, fractionReceived
 
-# Cancel
+## Cancel
 @docs cancel
 
-# Risky Requests
+## Risky Requests
 @docs riskyRequest
 
-# Elaborate Expectations
+## Elaborate Expectations
 @docs expectStringResponse, expectBytesResponse, Response, Metadata
 
-# Tasks
+## Tasks
 @docs task, Resolver, stringResolver, bytesResolver, riskyTask
 -}
 

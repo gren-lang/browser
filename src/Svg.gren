@@ -17,46 +17,41 @@ module Svg exposing
   , clipPath, colorProfile, cursor, filter, style, view
   )
 
-{-|
+{-| Fucntions for working with SVG images.
 
-# SVG Nodes
 @docs Svg, Attribute, text, node, map
 
-# HTML Embedding
+## HTML Embedding
 @docs svg, foreignObject
 
-# Graphics elements
+## Graphics elements
 @docs circle, ellipse, image, line, path, polygon, polyline, rect, use
 
-# Animation elements
+## Animation elements
 @docs animate, animateColor, animateMotion, animateTransform, mpath, set
 
-# Descriptive elements
+## Descriptive elements
 @docs desc, metadata, title
 
-# Containers
+## Containers
 @docs a, defs, g, marker, mask, pattern, switch, symbol
 
-# Text
-@docs altGlyph, altGlyphDef, altGlyphItem, glyph, glyphRef, textPath, text_,
-  tref, tspan
+## Text
+@docs altGlyph, altGlyphDef, altGlyphItem, glyph, glyphRef, textPath, text_, tref, tspan
 
-# Fonts
+## Fonts
 @docs font
 
-# Gradients
+## Gradients
 @docs linearGradient, radialGradient, stop
 
-# Filters
-@docs feBlend, feColorMatrix, feComponentTransfer, feComposite,
-  feConvolveMatrix, feDiffuseLighting, feDisplacementMap, feFlood, feFuncA,
-  feFuncB, feFuncG, feFuncR, feGaussianBlur, feImage, feMerge, feMergeNode,
-  feMorphology, feOffset, feSpecularLighting, feTile, feTurbulence
+## Filters
+@docs feBlend, feColorMatrix, feComponentTransfer, feComposite, feConvolveMatrix, feDiffuseLighting, feDisplacementMap, feFlood, feFuncA, feFuncB, feFuncG, feFuncR, feGaussianBlur, feImage, feMerge, feMergeNode, feMorphology, feOffset, feSpecularLighting, feTile, feTurbulence
 
-# Light source elements
+## Light source elements
 @docs feDistantLight, fePointLight, feSpotLight
 
-# Miscellaneous
+## Miscellaneous
 @docs clipPath, colorProfile, cursor, filter, style, view
 -}
 

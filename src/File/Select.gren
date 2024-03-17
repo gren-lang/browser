@@ -8,10 +8,9 @@ user event. So rather than allowing malicious sites to ask for files whenever
 they please, the user at least have to click a button first. As a result, the
 following commands only work when they are triggered by some user event.
 
-# Select Files
 @docs file, files
 
-# Limitations
+## Limitations
 
 The API here uses commands, but it seems like it could also provide tasks.
 The trouble is that a `Task` is guaranteed to succeed or fail. There should

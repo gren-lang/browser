@@ -22,10 +22,7 @@ module Html exposing
 {-| This file is organized roughly in order of popularity. The tags which you'd
 expect to use frequently will be closer to the top.
 
-# Primitives
 @docs Html, Attribute, text, node, map
-
-# Tags
 
 ## Headers
 @docs h1, h2, h3, h4, h5, h6
@@ -54,28 +51,25 @@ expect to use frequently will be closer to the top.
 ## Tables
 @docs table, caption, colgroup, col, tbody, thead, tfoot, tr, td, th
 
-
-## Less Common Elements
-
-### Less Common Inputs
+## Less Common Inputs
 @docs fieldset, legend, label, datalist, optgroup, output, progress, meter
 
-### Audio and Video
+## Audio and Video
 @docs audio, video, source, track
 
-### Embedded Objects
+## Embedded Objects
 @docs embed, object, param
 
-### Text Edits
+## Text Edits
 @docs ins, del
 
-### Semantic Text
+## Semantic Text
 @docs small, cite, dfn, abbr, time, var, samp, kbd, s, q
 
-### Less Common Text Tags
+## Less Common Text Tags
 @docs mark, ruby, rt, rp, bdi, bdo, wbr
 
-## Interactive Elements
+# Interactive Elements
 @docs details, summary, menuitem, menu
 
 -}

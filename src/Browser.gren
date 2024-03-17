@@ -9,22 +9,22 @@ module Browser exposing
 [`sandbox`](#sandbox) and [`document`](#document).
 
 
-# Sandboxes
+## Sandboxes
 
 @docs sandbox
 
 
-# Elements
+## Elements
 
 @docs element
 
 
-# Documents
+## Documents
 
 @docs document, Document
 
 
-# Applications
+## Applications
 
 @docs application, UrlRequest
 
@@ -45,19 +45,14 @@ import Url
 {-| Create a “sandboxed” program that cannot communicate with the outside
 world.
 
-This is great for learning the basics of [The Gren Architecture][gea]. You can
-see sandboxes in action in the following examples:
+This is great for learning the basics of [The Elm Architecture][tea], which Gren
+uses for structuring applications. You can see sandboxes in action in the following examples:
 
-  - [Buttons](https://guide.gren-lang.org/architecture/buttons.html)
-  - [Text Fields](https://guide.gren-lang.org/architecture/text_fields.html)
-  - [Forms](https://guide.gren-lang.org/architecture/forms.html)
+  - [Buttons](https://guide.elm-lang.org/architecture/buttons.html)
+  - [Text Fields](https://guide.elm-lang.org/architecture/text_fields.html)
+  - [Forms](https://guide.elm-lang.org/architecture/forms.html)
 
-Those are nice, but **I very highly recommend reading [this guide][guide]
-straight through** to really learn how Gren works. Understanding the
-fundamentals actually pays off in this language!
-
-[gea]: https://guide.gren-lang.org/architecture/
-[guide]: https://guide.gren-lang.org/
+[tea]: https://guide.elm-lang.org/architecture/
 
 -}
 sandbox :

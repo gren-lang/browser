@@ -11,15 +11,14 @@ module File exposing
   )
 
 
-{-|
+{-| Functions for working with files from the browser.
 
-# Files
 @docs File, decoder
 
-# Extract Content
+## Extract Content
 @docs toString, toBytes, toUrl
 
-# Read Metadata
+## Read Metadata
 @docs name, mime, size, lastModified
 
 -}

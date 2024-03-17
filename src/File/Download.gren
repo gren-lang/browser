@@ -13,7 +13,6 @@ however they please, the user at least have to click a button first. As a
 result, the following commands only work when they are triggered by some user
 event.
 
-# Download
 @docs string, bytes, url
 
 -}
