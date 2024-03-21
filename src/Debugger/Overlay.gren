@@ -489,6 +489,7 @@ viewMiniControls config numMsgs =
     , style "justify-content" "center"
     , style "align-items" "center"
     , style "cursor" "pointer"
+    , class "gren-debugger-overlay"
     , onClick config.open
     ]
     [ text string 
