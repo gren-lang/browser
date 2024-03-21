@@ -24,7 +24,10 @@
         "Svg.Attributes",
         "Svg.Events",
         "Svg.Keyed",
-        "Svg.Lazy"
+        "Svg.Lazy",
+        "WebStorage",
+        "LocalStorage",
+        "SessionStorage"
     ],
     "gren-version": "0.3.0 <= v < 0.4.0",
     "dependencies": {

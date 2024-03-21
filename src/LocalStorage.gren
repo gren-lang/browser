@@ -1,0 +1,76 @@
+module LocalStorage exposing (length, keyAtIndex, clear, get, set, remove)
+
+
+{-| LocalStorage is a key-value store of strings, where data sticks around
+even if the user closes the tab or the browser.
+
+Storage is typically limited to around 5Mb of data in most browsers,
+and the store can be cleared if the user requests it, hasn't visited your
+site in a while or if the user simply is running out of space.
+
+Still, `LocalStorage` can be useful for things like configuration, session
+keys or even communication between web applications running on the same
+origin domain.
+
+## Common operations
+
+@docs get, set, remove, clear
+
+## Discovery
+
+@docs length, keyAtIndex
+
+-}
+
+
+import WebStorage
+import Internal.WebStorage as Impl
+import Task exposing (Task)
+
+
+{-| Gets the number of key-value pairs in the store. You can use this
+to check if the store is empty, or in combination with `keyAtIndex` and
+`get` to read out every key-value pair that has been stored.
+-}
+length : Task WebStorage.AccessError Int
+length =
+    Impl.length True
+
+
+{-| Let's you find the nth key in the store. Keep in mind that keys
+are not stored in any particular order. So calling this function
+with index 0 will not necessarily return the first key that was
+stored.
+-}
+keyAtIndex : Int -> Task WebStorage.ReadError String
+keyAtIndex n =
+    Impl.keyAtIndex True n
+
+
+{-| Get the value associated with a given key.
+-}
+get : String -> Task WebStorage.ReadError String
+get key =
+    Impl.get True key
+
+
+{-| Insert the key-value pair into the store. If the key already exist
+it will be overwritten. If it doesn't exist, it will be added.
+-}
+set : String -> String -> Task WebStorage.WriteError {}
+set key value =
+    Impl.set True key value
+
+
+{-| Remove the key-value pair from the store.
+-}
+remove : String -> Task WebStorage.AccessError {}
+remove key =
+    Impl.remove True key
+
+
+{-| Remove all key-value pairs from the store.
+-}
+clear : Task WebStorage.AccessError {}
+clear =
+    Impl.clear True

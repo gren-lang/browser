@@ -1,0 +1,34 @@
+module WebStorage exposing (AccessError(..), ReadError(..), WriteError(..))
+
+{-| Common types for `LocalStorage` and `SessionStorage` modules
+
+@docs AccessError, ReadError, WriteError
+
+-}
+
+
+{-| Some operations can only really fail because access to web storage
+has been blocked. This can happen because the user has requested to block
+all cookies, for example, which also affects local storage.
+-}
+type AccessError
+    = AccessError
+
+
+{-| When reading from web storage, one of two things can go wrong:
+Either the thing you're asking for does not exist, or you don't have
+access to the storage (see `AccessError`).
+-}
+type ReadError
+    = NoValue
+    | ReadBlocked
+
+
+{-| When writing to web storage, one of two things can go wrong:
+Either you've run out of disk space (typically, each website origin
+gets around 5Mb of data), or you don't have access to the storage
+(see `AccessError`).
+-}
+type WriteError
+    = QuotaExceeded
+    | WriteBlocked

@@ -1,0 +1,30 @@
+module Internal.WebStorage exposing (length, keyAtIndex, get, set, remove, clear)
+
+
+import WebStorage
+import Task exposing (Task)
+import Gren.Kernel.WebStorage
+
+
+length : Bool -> Task WebStorage.AccessError Int
+length = Gren.Kernel.WebStorage.length
+
+
+keyAtIndex : Bool -> Int -> Task WebStorage.ReadError String
+keyAtIndex = Gren.Kernel.WebStorage.key
+
+
+get : Bool -> String -> Task WebStorage.ReadError String
+get = Gren.Kernel.WebStorage.get
+
+
+set : Bool -> String -> String -> Task WebStorage.WriteError {}
+set = Gren.Kernel.WebStorage.set
+
+
+remove : Bool -> String -> Task WebStorage.AccessError {}
+remove = Gren.Kernel.WebStorage.remove
+
+
+clear : Bool -> Task WebStorage.AccessError {}
+clear = Gren.Kernel.WebStorage.clear

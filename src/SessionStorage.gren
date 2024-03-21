@@ -1,0 +1,75 @@
+module SessionStorage exposing (length, keyAtIndex, clear, get, set, remove)
+
+
+{-| SessionStorage is a key-value store of strings, where all data is removed
+at the end of a session (ie. when the tab or browser is closed).
+
+Storage is typically limited to around 5Mb of data in most browsers,
+and can be cleared if the user requests it or if the user is running out of space.
+
+Still, `SessionStorage` can be useful for things like configuration, session
+keys or even communication between web applications running on the same
+origin domain.
+
+## Common operations
+
+@docs get, set, remove, clear
+
+## Discovery
+
+@docs length, keyAtIndex
+
+-}
+
+
+import WebStorage
+import Internal.WebStorage as Impl
+import Task exposing (Task)
+
+
+{-| Gets the number of key-value pairs in the store. You can use this
+to check if the store is empty, or in combination with `keyAtIndex` and
+`get` to read out every key-value pair that has been stored.
+-}
+length : Task WebStorage.AccessError Int
+length =
+    Impl.length False
+
+
+{-| Let's you find the nth key in the store. Keep in mind that keys
+are not stored in any particular order. So calling this function
+with index 0 will not necessarily return the first key that was
+stored.
+-}
+keyAtIndex : Int -> Task WebStorage.ReadError String
+keyAtIndex n =
+    Impl.keyAtIndex False n
+
+
+{-| Get the value associated with a given key.
+-}
+get : String -> Task WebStorage.ReadError String
+get key =
+    Impl.get False key
+
+
+{-| Insert the key-value pair into the store. If the key already exist
+it will be overwritten. If it doesn't exist, it will be added.
+-}
+set : String -> String -> Task WebStorage.WriteError {}
+set key value =
+    Impl.set False key value
+
+
+{-| Remove the key-value pair from the store.
+-}
+remove : String -> Task WebStorage.AccessError {}
+remove key =
+    Impl.remove False key
+
+
+{-| Remove all key-value pairs from the store.
+-}
+clear : Task WebStorage.AccessError {}
+clear =
+    Impl.clear False
