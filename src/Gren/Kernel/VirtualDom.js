@@ -650,7 +650,8 @@ function _VirtualDom_diffHelp(x, y, patches, index) {
       y.__node = y.__thunk();
       var subPatches = [];
       _VirtualDom_diffHelp(x.__node, y.__node, subPatches, 0);
-      subPatches.length > 0 && _VirtualDom_pushPatch(patches, __3_THUNK, index, subPatches);
+      subPatches.length > 0 &&
+        _VirtualDom_pushPatch(patches, __3_THUNK, index, subPatches);
       return;
 
     case __2_TAGGER:

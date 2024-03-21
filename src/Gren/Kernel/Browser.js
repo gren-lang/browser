@@ -19,80 +19,80 @@ import Url exposing (fromString)
 
 // ELEMENT
 
-var __Debugger_element;
+var _Browser_element = F4(function (impl, flagDecoder, debugMetadata, args) {
+  if (typeof __Debugger_element !== "undefined") {
+    return A4(__Debugger_element, impl, flagDecoder, debugMetadata, args);
+  }
 
-var _Browser_element =
-  __Debugger_element ||
-  F4(function (impl, flagDecoder, debugMetadata, args) {
-    return __Platform_initialize(
-      flagDecoder,
-      args,
-      impl.__$init,
-      impl.__$update,
-      impl.__$subscriptions,
-      function (sendToApp, initialModel) {
-        var view = impl.__$view;
-        /**__PROD/
+  return __Platform_initialize(
+    flagDecoder,
+    args,
+    impl.__$init,
+    impl.__$update,
+    impl.__$subscriptions,
+    function (sendToApp, initialModel) {
+      var view = impl.__$view;
+      /**__PROD/
 			var domNode = args['node'];
 			//*/
-        /**__DEBUG/
+      /**__DEBUG/
 			var domNode = args && args['node'] ? args['node'] : __Debug_crash(0);
 			//*/
-        var currNode = _VirtualDom_virtualize(domNode);
+      var currNode = _VirtualDom_virtualize(domNode);
 
-        return _Browser_makeAnimator(initialModel, function (model) {
-          var nextNode = view(model);
-          var patches = __VirtualDom_diff(currNode, nextNode);
-          domNode = __VirtualDom_applyPatches(
-            domNode,
-            currNode,
-            patches,
-            sendToApp
-          );
-          currNode = nextNode;
-        });
-      }
-    );
-  });
+      return _Browser_makeAnimator(initialModel, function (model) {
+        var nextNode = view(model);
+        var patches = __VirtualDom_diff(currNode, nextNode);
+        domNode = __VirtualDom_applyPatches(
+          domNode,
+          currNode,
+          patches,
+          sendToApp
+        );
+        currNode = nextNode;
+      });
+    }
+  );
+});
 
 // DOCUMENT
 
-var __Debugger_document;
+var _Browser_document = F4(function (impl, flagDecoder, debugMetadata, args) {
+  if (typeof __Debugger_document !== "undefined") {
+    return A4(__Debugger_document, impl, flagDecoder, debugMetadata, args);
+  }
 
-var _Browser_document =
-  __Debugger_document ||
-  F4(function (impl, flagDecoder, debugMetadata, args) {
-    return __Platform_initialize(
-      flagDecoder,
-      args,
-      impl.__$init,
-      impl.__$update,
-      impl.__$subscriptions,
-      function (sendToApp, initialModel) {
-        var divertHrefToApp = impl.__$setup && impl.__$setup(sendToApp);
-        var view = impl.__$view;
-        var title = __VirtualDom_doc.title;
-        var bodyNode = __VirtualDom_doc.body;
-        var currNode = _VirtualDom_virtualize(bodyNode);
-        return _Browser_makeAnimator(initialModel, function (model) {
-          __VirtualDom_divertHrefToApp = divertHrefToApp;
-          var doc = view(model);
-          var nextNode = __VirtualDom_node("body")([])(doc.__$body);
-          var patches = __VirtualDom_diff(currNode, nextNode);
-          bodyNode = __VirtualDom_applyPatches(
-            bodyNode,
-            currNode,
-            patches,
-            sendToApp
-          );
-          currNode = nextNode;
-          __VirtualDom_divertHrefToApp = 0;
-          title !== doc.__$title &&
-            (__VirtualDom_doc.title = title = doc.__$title);
-        });
-      }
-    );
-  });
+  return __Platform_initialize(
+    flagDecoder,
+    args,
+    impl.__$init,
+    impl.__$update,
+    impl.__$subscriptions,
+    function (sendToApp, initialModel) {
+      var divertHrefToApp = impl.__$setup && impl.__$setup(sendToApp);
+      var view = impl.__$view;
+      var title = __VirtualDom_doc.title;
+      var bodyNode = __VirtualDom_doc.body;
+      var currNode = _VirtualDom_virtualize(bodyNode);
+      return _Browser_makeAnimator(initialModel, function (model) {
+        __VirtualDom_divertHrefToApp = divertHrefToApp;
+        var doc = view(model);
+        var nextNode = __VirtualDom_node("body")([])(doc.__$body);
+        var patches = __VirtualDom_diff(currNode, nextNode);
+        bodyNode = __VirtualDom_applyPatches(
+          bodyNode,
+          currNode,
+          patches,
+          sendToApp
+        );
+        currNode = nextNode;
+        __VirtualDom_divertHrefToApp = 0;
+        title !== doc.__$title &&
+          (__VirtualDom_doc.title = title = doc.__$title);
+      });
+    }
+  );
+});
 
 // ANIMATION
 
