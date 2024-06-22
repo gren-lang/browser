@@ -306,21 +306,24 @@ onEffects router subs state =
   let
     newSubs = Array.map addKey subs
 
+    fromArray arr =
+      Array.foldl (\{ key, value } dict -> Dict.set key value dict) Dict.empty arr
+
     stepLeft _ pid { deads, lives, news } =
       { deads = Array.pushFirst pid deads, lives = lives, news = news }
 
     stepBoth key pid _ { deads, lives, news } =
-      { deads = deads, lives = Dict.insert key pid lives, news = news }
+      { deads = deads, lives = Dict.set key pid lives, news = news }
 
     stepRight key sub { deads, lives, news } =
       { deads = deads, lives = lives, news = Array.pushFirst (spawn router key sub) news }
 
     { deads = deadPids, lives = livePids, news = makeNewPids } =
-      Dict.merge stepLeft stepBoth stepRight state.pids (Dict.fromArray newSubs) { deads = [], lives = Dict.empty, news = [] }
+      Dict.merge stepLeft stepBoth stepRight state.pids (fromArray newSubs) { deads = [], lives = Dict.empty, news = [] }
   in
   Task.sequence (Array.map Process.kill deadPids)
     |> Task.andThen (\_ -> Task.sequence makeNewPids)
-    |> Task.andThen (\pids -> Task.succeed { subs = newSubs, pids = (Dict.union livePids (Dict.fromArray pids))})
+    |> Task.andThen (\pids -> Task.succeed { subs = newSubs, pids = (Dict.union livePids (fromArray pids))})
 
 
 

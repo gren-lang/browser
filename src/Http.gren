@@ -1019,7 +1019,7 @@ updateReqs router cmds reqs =
                       updateReqs router otherCmds reqs
 
                     Just tracker ->
-                      updateReqs router otherCmds (Dict.insert tracker pid reqs)
+                      updateReqs router otherCmds (Dict.set tracker pid reqs)
               )
 
 

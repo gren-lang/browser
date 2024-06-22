@@ -332,6 +332,5 @@ encodeUnion { args, tags } =
 encodeDict : (a -> Encode.Value) -> Dict String a -> Encode.Value
 encodeDict f dict =
     dict
-        |> Dict.map (\key value -> f value)
-        |> Dict.toArray
+        |> Dict.foldl (\key value arr -> Array.pushLast { key = key, value = f value } arr) []
         |> Encode.object

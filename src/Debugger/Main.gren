@@ -269,7 +269,7 @@ wrapUpdate update msg model =
 
     Open ->
       { model = model
-      , command = Task.perform (always NoOp) (Gren.Kernel.Debugger.open model.popout)
+      , command = Task.perform (\_ -> NoOp) (Gren.Kernel.Debugger.open model.popout)
       }
 
     Up ->
@@ -392,12 +392,12 @@ drag info layout =
 
 scroll : Popout -> Cmd (Msg msg)
 scroll popout =
-  Task.perform (always NoOp) (Gren.Kernel.Debugger.scroll popout)
+  Task.perform (\_ -> NoOp) (Gren.Kernel.Debugger.scroll popout)
 
 
 scrollTo : String -> Popout -> Cmd (Msg msg)
 scrollTo id popout =
-  Task.perform (always NoOp) (Gren.Kernel.Debugger.scrollTo id popout)
+  Task.perform (\_ -> NoOp) (Gren.Kernel.Debugger.scrollTo id popout)
 
 
 upload : Popout -> Cmd (Msg msg)

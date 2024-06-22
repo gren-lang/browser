@@ -86,7 +86,7 @@ initHelp isOuter expando =
       if isOuter then
         Record False (Dict.map (\_ v -> initHelp False v) entries)
 
-      else if Dict.size entries <= 4 then
+      else if Dict.count entries <= 4 then
         Record False entries
 
       else
@@ -387,7 +387,7 @@ viewRecord maybeKey isClosed record =
 
 viewRecordOpen : Dict String Expando -> Html Msg
 viewRecordOpen record =
-  div [] (Array.map viewRecordEntry (Dict.toArray record))
+  div [] (Array.map viewRecordEntry (Dict.foldl (\key value arr -> Array.pushLast { key = key, value = value} arr) [] record))
 
 
 viewRecordEntry : { key : String, value : Expando } -> Html Msg
@@ -539,7 +539,7 @@ viewTinyRecord record =
   if Dict.isEmpty record then
     { index = 2, nodes = [ text "{}" ] }
   else
-    viewTinyRecordHelp 0 "{ " (Dict.toArray record)
+    viewTinyRecordHelp 0 "{ " (Dict.foldl (\key value arr -> Array.pushLast { key = key, value = value} arr) [] record)
 
 
 viewTinyRecordHelp : Int -> String -> Array { key : String, value : Expando } -> { index : Int, nodes : Array (Html msg) }
