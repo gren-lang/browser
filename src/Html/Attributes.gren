@@ -434,7 +434,7 @@ type_ =
   stringProperty "type"
 
 
-{-| Defines a default value which will be displayed in a `button`, `option`,
+{-| The value which will be displayed in a `button`, `option`,
 `input`, `li`, `meter`, `progress`, or `param`.
 -}
 value : String -> Attribute msg
