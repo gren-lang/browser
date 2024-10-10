@@ -54,51 +54,55 @@ function _VirtualDom_text(string) {
 
 // NODE
 
-var _VirtualDom_nodeNS = F4(function (namespace, tag, factList, kids) {
-  for (var descendantsCount = 0, i = 0; i < kids.length; i++) {
-    var kid = kids[i];
-    descendantsCount += kid.__descendantsCount || 0;
-  }
+var _VirtualDom_nodeNS = F2(function (namespace, tag) {
+  return F2(function(factList, kids) {
+    for (var descendantsCount = 0, i = 0; i < kids.length; i++) {
+      var kid = kids[i];
+      descendantsCount += kid.__descendantsCount || 0;
+    }
 
-  descendantsCount += kids.length;
+    descendantsCount += kids.length;
 
-  return {
-    $: __2_NODE,
-    __tag: tag,
-    __facts: _VirtualDom_organizeFacts(factList),
-    __kids: kids,
-    __namespace: namespace,
-    __descendantsCount: descendantsCount,
-  };
+    return {
+      $: __2_NODE,
+      __tag: tag,
+      __facts: _VirtualDom_organizeFacts(factList),
+      __kids: kids,
+      __namespace: namespace,
+      __descendantsCount: descendantsCount,
+    };
+  });
 });
 
-var _VirtualDom_node = F3(function (tag, factList, kidList) {
-  return A4(_VirtualDom_nodeNS, undefined, tag, factList, kidList);
-});
+var _VirtualDom_node = function (tag) {
+  return _VirtualDom_nodeNS.f(undefined, tag);
+};
 
 // KEYED NODE
 
-var _VirtualDom_keyedNodeNS = F4(function (namespace, tag, factList, kids) {
-  for (var descendantsCount = 0, i = 0; i < kids.length; i++) {
-    var kid = kids[i];
-    descendantsCount += kid.__$node.__descendantsCount || 0;
-  }
+var _VirtualDom_keyedNodeNS = F2(function (namespace, tag) {
+  return F2(function (factList, kids) {
+    for (var descendantsCount = 0, i = 0; i < kids.length; i++) {
+      var kid = kids[i];
+      descendantsCount += kid.__$node.__descendantsCount || 0;
+    }
 
-  descendantsCount += kids.length;
+    descendantsCount += kids.length;
 
-  return {
-    $: __2_KEYED_NODE,
-    __tag: tag,
-    __facts: _VirtualDom_organizeFacts(factList),
-    __kids: kids,
-    __namespace: namespace,
-    __descendantsCount: descendantsCount,
-  };
+    return {
+      $: __2_KEYED_NODE,
+      __tag: tag,
+      __facts: _VirtualDom_organizeFacts(factList),
+      __kids: kids,
+      __namespace: namespace,
+      __descendantsCount: descendantsCount,
+    };
+  });
 });
 
-var _VirtualDom_keyedNode = F3(function (tag, factList, kidList) {
-  return A4(_VirtualDom_keyedNodeNS, undefined, tag, factList, kidList);
-});
+var _VirtualDom_keyedNode = function (tag) {
+  return _VirtualDom_keyedNodeNS.f(undefined, tag);
+};
 
 // CUSTOM
 
