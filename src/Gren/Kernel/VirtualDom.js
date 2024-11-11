@@ -20,10 +20,8 @@ function _VirtualDom_appendChild(parent, child) {
   parent.appendChild(child);
 }
 
-var _VirtualDom_init = F4(function (
+var _VirtualDom_init = F2(function (
   virtualNode,
-  flagDecoder,
-  debugMetadata,
   args
 ) {
   // NOTE: this function needs __Platform_export available to work
