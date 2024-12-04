@@ -34,7 +34,7 @@ type MySub msg
 
 subMap : (a -> b) -> MySub a -> MySub b
 subMap func sub =
-    case sub of
+    when sub is
         Time tagger ->
             Time (func << tagger)
 
@@ -65,7 +65,7 @@ init =
 
 onEffects : Platform.Router msg Int -> Array (MySub msg) -> State msg -> Task Never (State msg)
 onEffects router subs { request, oldTime } =
-    case { r = request, s = subs } of
+    when { r = request, s = subs } is
         { r = Nothing, s = [] } ->
             init
 
@@ -89,7 +89,7 @@ onSelfMsg : Platform.Router msg Int -> Int -> State msg -> Task Never (State msg
 onSelfMsg router newTime { subs, oldTime } =
     let
         send sub =
-            case sub of
+            when sub is
                 Time tagger ->
                     Platform.sendToApp router (tagger (Time.millisToPosix newTime))
 

@@ -94,7 +94,7 @@ this `()` value like this:
     type Msg = Click | ...
 
     update msg model =
-      case msg of
+      when msg is
         Click ->
           ...
 
@@ -374,7 +374,7 @@ keyedNodeNS namespace tag =
 
 toHandlerInt : Handler msg -> Int
 toHandlerInt handler =
-  case handler of
+  when handler is
     Normal _ -> 0
     MayStopPropagation _ -> 1
     MayPreventDefault _ -> 2

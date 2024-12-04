@@ -64,13 +64,14 @@ function _Http_configureRequest(xhr, request) {
 // RESPONSES
 
 function _Http_toResponse(toBody, xhr) {
-  return A2(
-    200 <= xhr.status && xhr.status < 300
+  var ctor = 200 <= xhr.status && xhr.status < 300
       ? __Http_GoodStatus_
-      : __Http_BadStatus_,
-    _Http_toMetadata(xhr),
-    toBody(xhr.response)
-  );
+      : __Http_BadStatus_;
+
+  return ctor({
+    __$metadata: _Http_toMetadata(xhr),
+    __$body: toBody(xhr.response)
+  });
 }
 
 // METADATA

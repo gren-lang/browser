@@ -131,7 +131,7 @@ if someone clicked out of it:
 
     subscriptions : Model -> Sub Msg
     subscriptions model =
-      case model.dropDown of
+      when model.dropDown is
         Closed _ ->
           Sub.none
 
@@ -253,16 +253,16 @@ type Node
 
 on : Node -> String -> Decode.Decoder msg -> Sub msg
 on node name decoder =
-  subscription (MySub node name decoder)
+  subscription (MySub { node = node, name = name, decoder = decoder })
 
 
 type MySub msg
-  = MySub Node String (Decode.Decoder msg)
+  = MySub { node : Node, name : String, decoder : (Decode.Decoder msg) }
 
 
 subMap : (a -> b) -> MySub a -> MySub b
-subMap func (MySub node name decoder) =
-  MySub node name (Decode.map func decoder)
+subMap func (MySub { node, name, decoder }) =
+  MySub { node = node, name = name, decoder = (Decode.map func decoder) }
 
 
 
@@ -289,13 +289,13 @@ type alias Event =
 onSelfMsg : Platform.Router msg Event -> Event -> State msg -> Task Never (State msg)
 onSelfMsg router { key, event } state =
   let
-    toMessage { key = subKey, value = MySub node name decoder } =
+    toMessage { key = subKey, value = MySub { node, name, decoder } } =
       if subKey == key then
         Gren.Kernel.Browser.decodeEvent decoder event
       else
         Nothing
 
-    messages = Array.filterMap toMessage state.subs
+    messages = Array.mapAndKeepJust toMessage state.subs
   in
   Task.sequence (Array.map (Platform.sendToApp router) messages)
     |> Task.andThen (\_ -> Task.succeed state)
@@ -331,13 +331,13 @@ onEffects router subs state =
 
 
 addKey : MySub msg -> { key : String, value : MySub msg }
-addKey ((MySub node name _) as sub) =
+addKey ((MySub { node, name }) as sub) =
   { key = nodeToKey node ++ name, value = sub }
 
 
 nodeToKey : Node -> String
 nodeToKey node =
-  case node of
+  when node is
     Document -> "d_"
     Window   -> "w_"
 
@@ -347,10 +347,10 @@ nodeToKey node =
 
 
 spawn : Platform.Router msg Event -> String -> MySub msg -> Task Never { key : String,  value : Process.Id }
-spawn router key (MySub node name _) =
+spawn router key (MySub { node, name }) =
   let
     actualNode =
-      case node of
+      when node is
         Document -> Gren.Kernel.Browser.doc
         Window -> Gren.Kernel.Browser.window
   in

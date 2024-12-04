@@ -132,7 +132,7 @@ you will get both classes!
 classList : Array { class : String, enabled : Bool } -> Attribute msg
 classList classes =
   classes
-    |> Array.filter .enabled
+    |> Array.keepIf .enabled
     |> Array.map .class
     |> String.join " "
     |> class
