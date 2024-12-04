@@ -31,7 +31,6 @@ module Browser exposing
 -}
 
 import Browser.Navigation as Navigation
-import Debugger.Main
 import Dict
 import Gren.Kernel.Browser
 import Html exposing (Html)

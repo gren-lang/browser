@@ -4,7 +4,6 @@ import Basics exposing (never)
 import Browser exposing (Internal, External)
 import Browser.Dom as Dom exposing (NotFound)
 import Gren.Kernel.Debug exposing (crash)
-import Gren.Kernel.Debugger exposing (element, document)
 import Gren.Kernel.Json exposing (runHelp)
 import Gren.Kernel.Platform exposing (initialize)
 import Gren.Kernel.Scheduler exposing (binding, fail, rawSpawn, succeed, spawn)
@@ -19,11 +18,7 @@ import Url exposing (fromString)
 
 // ELEMENT
 
-var _Browser_element = F4(function (impl, flagDecoder, debugMetadata, args) {
-  if (typeof __Debugger_element !== "undefined") {
-    return A4(__Debugger_element, impl, flagDecoder, debugMetadata, args);
-  }
-
+var _Browser_element = F3(function (impl, flagDecoder, args) {
   return __Platform_initialize(
     flagDecoder,
     args,
@@ -57,11 +52,7 @@ var _Browser_element = F4(function (impl, flagDecoder, debugMetadata, args) {
 
 // DOCUMENT
 
-var _Browser_document = F4(function (impl, flagDecoder, debugMetadata, args) {
-  if (typeof __Debugger_document !== "undefined") {
-    return A4(__Debugger_document, impl, flagDecoder, debugMetadata, args);
-  }
-
+var _Browser_document = F3(function (impl, flagDecoder, args) {
   return __Platform_initialize(
     flagDecoder,
     args,
