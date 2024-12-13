@@ -4,7 +4,7 @@
     "name": "gren-lang/browser",
     "summary": "Run Gren in browsers",
     "license": "BSD-3-Clause",
-    "version": "4.0.0",
+    "version": "5.0.0",
     "exposed-modules": [
         "Browser",
         "Browser.Dom",
@@ -31,7 +31,7 @@
     ],
     "gren-version": "0.5.0 <= v < 0.6.0",
     "dependencies": {
-        "gren-lang/core": "local:../core",
-        "gren-lang/url": "local:../url"
+        "gren-lang/core": "6.0.0 <= v < 7.0.0",
+        "gren-lang/url": "5.0.0 <= v < 6.0.0"
     }
 }
