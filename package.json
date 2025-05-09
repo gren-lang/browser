@@ -4,5 +4,8 @@
   },
   "devDependencies": {
     "prettier": "3.3.3"
+  },
+  "dependencies": {
+    "gren-lang": "^0.5.4"
   }
 }
