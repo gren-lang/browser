@@ -906,13 +906,13 @@ function _VirtualDom_diffKeyedKids(xParent, yParent, patches, rootIndex) {
 
     if (xNext) {
       var xNextKey = xNext.__$key;
-      var xNextNode = xNext.__$key;
+      var xNextNode = xNext.__$node;
       oldMatch = yKey === xNextKey;
     }
 
     if (yNext) {
       var yNextKey = yNext.__$key;
-      var yNextNode = yNext.__$key;
+      var yNextNode = yNext.__$node;
       newMatch = xKey === yNextKey;
     }
 
