@@ -25,5 +25,5 @@ jobs:
       - name: Verify formatting
         run: devbox run format:check
 
-      - name: Run tests
+      - name: Compile
         run: devbox run -- gren make
