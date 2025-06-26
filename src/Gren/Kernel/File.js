@@ -105,7 +105,7 @@ function _File_click(node) {
       false,
       false,
       0,
-      null
+      null,
     );
     document.body.appendChild(node);
     node.dispatchEvent(event);

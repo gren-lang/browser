@@ -1,14 +1,16 @@
 {
-  "$schema":  "https://raw.githubusercontent.com/jetify-com/devbox/0.13.6/.schema/devbox.schema.json",
-  "packages": ["nodejs@20"],
+  "$schema": "https://raw.githubusercontent.com/jetify-com/devbox/0.13.6/.schema/devbox.schema.json",
+  "packages": [
+    "nodejs@20",
+    "nodePackages.prettier@latest",
+    "github:gren-lang/nix/0.5.4"
+  ],
   "shell": {
-    "init_hook": [
-      "echo 'Welcome to devbox!' > /dev/null"
-    ],
+    "init_hook": ["echo 'Welcome to devbox!' > /dev/null"],
     "scripts": {
-      "test": [
-        "echo \"Error: no test specified\" && exit 1"
-      ]
+      "format": "prettier -w \"!**/*.json\" .",
+      "format:check": "prettier -c \"!**/*.json\" .",
+      "test": ["echo \"Error: no test specified\" && exit 1"]
     }
   }
 }

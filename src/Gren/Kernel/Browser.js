@@ -42,11 +42,11 @@ var _Browser_element = F3(function (impl, flagDecoder, args) {
           domNode,
           currNode,
           patches,
-          sendToApp
+          sendToApp,
         );
         currNode = nextNode;
       });
-    }
+    },
   );
 });
 
@@ -74,14 +74,14 @@ var _Browser_document = F3(function (impl, flagDecoder, args) {
           bodyNode,
           currNode,
           patches,
-          sendToApp
+          sendToApp,
         );
         currNode = nextNode;
         __VirtualDom_divertHrefToApp = 0;
         title !== doc.__$title &&
           (__VirtualDom_doc.title = title = doc.__$title);
       });
-    }
+    },
   );
 });
 
@@ -163,8 +163,8 @@ function _Browser_application(impl) {
                 curr.__$host === next.__$host &&
                 curr.__$port_.a === next.__$port_.a
                 ? __Browser_Internal(next)
-                : __Browser_External(href)
-            )
+                : __Browser_External(href),
+            ),
           );
         }
       });
@@ -189,7 +189,7 @@ var _Browser_go = F2(function (key, n) {
     __Scheduler_binding(function () {
       n && history.go(n);
       key();
-    })
+    }),
   );
 });
 
@@ -200,7 +200,7 @@ var _Browser_pushUrl = F2(function (key, url) {
     __Scheduler_binding(function () {
       history.pushState({}, "", url);
       key();
-    })
+    }),
   );
 });
 
@@ -211,7 +211,7 @@ var _Browser_replaceUrl = F2(function (key, url) {
     __Scheduler_binding(function () {
       history.replaceState({}, "", url);
       key();
-    })
+    }),
   );
 });
 
@@ -235,12 +235,12 @@ var _Browser_on = F3(function (node, eventName, sendToSelf) {
       node.addEventListener(
         eventName,
         handler,
-        __VirtualDom_passiveSupported && { passive: true }
+        __VirtualDom_passiveSupported && { passive: true },
       );
       return function () {
         node.removeEventListener(eventName, handler);
       };
-    })
+    }),
   );
 });
 
@@ -255,12 +255,12 @@ function _Browser_visibilityInfo() {
   return typeof __VirtualDom_doc.hidden !== "undefined"
     ? { __$hidden: "hidden", __$change: "visibilitychange" }
     : typeof __VirtualDom_doc.mozHidden !== "undefined"
-    ? { __$hidden: "mozHidden", __$change: "mozvisibilitychange" }
-    : typeof __VirtualDom_doc.msHidden !== "undefined"
-    ? { __$hidden: "msHidden", __$change: "msvisibilitychange" }
-    : typeof __VirtualDom_doc.webkitHidden !== "undefined"
-    ? { __$hidden: "webkitHidden", __$change: "webkitvisibilitychange" }
-    : { __$hidden: "hidden", __$change: "visibilitychange" };
+      ? { __$hidden: "mozHidden", __$change: "mozvisibilitychange" }
+      : typeof __VirtualDom_doc.msHidden !== "undefined"
+        ? { __$hidden: "msHidden", __$change: "msvisibilitychange" }
+        : typeof __VirtualDom_doc.webkitHidden !== "undefined"
+          ? { __$hidden: "webkitHidden", __$change: "webkitvisibilitychange" }
+          : { __$hidden: "hidden", __$change: "visibilitychange" };
 }
 
 // ANIMATION FRAMES
@@ -292,7 +292,7 @@ function _Browser_withNode(id, doStuff) {
       callback(
         node
           ? __Scheduler_succeed(doStuff(node))
-          : __Scheduler_fail(__Dom_NotFound(id))
+          : __Scheduler_fail(__Dom_NotFound(id)),
       );
     });
   });
@@ -338,14 +338,14 @@ function _Browser_getScene() {
       body.offsetWidth,
       elem.scrollWidth,
       elem.offsetWidth,
-      elem.clientWidth
+      elem.clientWidth,
     ),
     __$height: Math.max(
       body.scrollHeight,
       body.offsetHeight,
       elem.scrollHeight,
       elem.offsetHeight,
-      elem.clientHeight
+      elem.clientHeight,
     ),
   };
 }
@@ -417,7 +417,7 @@ function _Browser_reload(skipCache) {
     __Basics_never,
     __Scheduler_binding(function (callback) {
       __VirtualDom_doc.location.reload(skipCache);
-    })
+    }),
   );
 }
 
@@ -433,6 +433,6 @@ function _Browser_load(url) {
         // Other browsers reload the page, so let's be consistent about that.
         __VirtualDom_doc.location.reload(false);
       }
-    })
+    }),
   );
 }

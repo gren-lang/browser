@@ -64,13 +64,14 @@ function _Http_configureRequest(xhr, request) {
 // RESPONSES
 
 function _Http_toResponse(toBody, xhr) {
-  var ctor = 200 <= xhr.status && xhr.status < 300
+  var ctor =
+    200 <= xhr.status && xhr.status < 300
       ? __Http_GoodStatus_
       : __Http_BadStatus_;
 
   return ctor({
     __$metadata: _Http_toMetadata(xhr),
-    __$body: toBody(xhr.response)
+    __$body: toBody(xhr.response),
   });
 }
 
@@ -106,10 +107,10 @@ function _Http_parseHeaders(rawHeaders) {
         key,
         function (oldValue) {
           return __Maybe_Just(
-            __Maybe_isJust(oldValue) ? value + ", " + oldValue.a : value
+            __Maybe_isJust(oldValue) ? value + ", " + oldValue.a : value,
           );
         },
-        headers
+        headers,
       );
     }
   }
@@ -177,7 +178,7 @@ function _Http_track(router, xhr, tracker) {
           __$sent: event.loaded,
           __$size: event.total,
         }),
-      })
+      }),
     );
   });
   xhr.addEventListener("progress", function (event) {
@@ -193,7 +194,7 @@ function _Http_track(router, xhr, tracker) {
             ? __Maybe_Just(event.total)
             : __Maybe_Nothing,
         }),
-      })
+      }),
     );
   });
 }

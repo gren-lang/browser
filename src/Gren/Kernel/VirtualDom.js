@@ -20,10 +20,7 @@ function _VirtualDom_appendChild(parent, child) {
   parent.appendChild(child);
 }
 
-var _VirtualDom_init = F2(function (
-  virtualNode,
-  args
-) {
+var _VirtualDom_init = F2(function (virtualNode, args) {
   // NOTE: this function needs __Platform_export available to work
 
   /**__PROD/
@@ -35,7 +32,7 @@ var _VirtualDom_init = F2(function (
 
   node.parentNode.replaceChild(
     _VirtualDom_render(virtualNode, function () {}),
-    node
+    node,
   );
 
   return {};
@@ -53,7 +50,7 @@ function _VirtualDom_text(string) {
 // NODE
 
 var _VirtualDom_nodeNS = F2(function (namespace, tag) {
-  return F2(function(factList, kids) {
+  return F2(function (factList, kids) {
     for (var descendantsCount = 0, i = 0; i < kids.length; i++) {
       var kid = kids[i];
       descendantsCount += kid.__descendantsCount || 0;
@@ -285,7 +282,7 @@ function _VirtualDom_mapHandler(func, handler) {
         __Json_map2,
         _VirtualDom_mapMayStopPropagation,
         __Json_succeed(func),
-        handler.a
+        handler.a,
       );
       break;
     case 2:
@@ -293,7 +290,7 @@ function _VirtualDom_mapHandler(func, handler) {
         __Json_map2,
         _VirtualDom_mapMayPreventDefault,
         __Json_succeed(func),
-        handler.a
+        handler.a,
       );
       break;
     case 3:
@@ -301,7 +298,7 @@ function _VirtualDom_mapHandler(func, handler) {
         __Json_map2,
         _VirtualDom_mapEventRecord,
         __Json_succeed(func),
-        handler.a
+        handler.a,
       );
       break;
   }
@@ -374,7 +371,7 @@ function _VirtualDom_render(vNode, eventNode) {
   if (tag === __2_THUNK) {
     return _VirtualDom_render(
       vNode.__node || (vNode.__node = vNode.__thunk()),
-      eventNode
+      eventNode,
     );
   }
 
@@ -423,8 +420,8 @@ function _VirtualDom_render(vNode, eventNode) {
       domNode,
       _VirtualDom_render(
         tag === __2_NODE ? kids[i] : kids[i].__$node,
-        eventNode
-      )
+        eventNode,
+      ),
     );
   }
 
@@ -440,13 +437,14 @@ function _VirtualDom_applyFacts(domNode, eventNode, facts) {
     key === "a__1_STYLE"
       ? _VirtualDom_applyStyles(domNode, value)
       : key === "a__1_EVENT"
-      ? _VirtualDom_applyEvents(domNode, eventNode, value)
-      : key === "a__1_ATTR"
-      ? _VirtualDom_applyAttrs(domNode, value)
-      : key === "a__1_ATTR_NS"
-      ? _VirtualDom_applyAttrsNS(domNode, value)
-      : ((key !== "value" && key !== "checked") || domNode[key] !== value) &&
-        (domNode[key] = value);
+        ? _VirtualDom_applyEvents(domNode, eventNode, value)
+        : key === "a__1_ATTR"
+          ? _VirtualDom_applyAttrs(domNode, value)
+          : key === "a__1_ATTR_NS"
+            ? _VirtualDom_applyAttrsNS(domNode, value)
+            : ((key !== "value" && key !== "checked") ||
+                domNode[key] !== value) &&
+              (domNode[key] = value);
   }
 }
 
@@ -515,7 +513,7 @@ function _VirtualDom_applyEvents(domNode, eventNode, events) {
       oldCallback,
       _VirtualDom_passiveSupported && {
         passive: __VirtualDom_toHandlerInt(newHandler) < 2,
-      }
+      },
     );
     allCallbacks[key] = oldCallback;
   }
@@ -533,7 +531,7 @@ try {
       get: function () {
         _VirtualDom_passiveSupported = true;
       },
-    })
+    }),
   );
 } catch (e) {}
 
@@ -793,10 +791,10 @@ function _VirtualDom_diffFacts(x, y, category) {
           ? ""
           : null
         : category === "a__1_STYLE"
-        ? ""
-        : category === "a__1_EVENT" || category === "a__1_ATTR"
-        ? undefined
-        : { __namespace: x[xKey].__namespace, __value: undefined };
+          ? ""
+          : category === "a__1_EVENT" || category === "a__1_ATTR"
+            ? undefined
+            : { __namespace: x[xKey].__namespace, __value: undefined };
 
       continue;
     }
@@ -928,7 +926,7 @@ function _VirtualDom_diffKeyedKids(xParent, yParent, patches, rootIndex) {
         xKey,
         yNode,
         yIndex,
-        inserts
+        inserts,
       );
       index += xNode.__descendantsCount || 0;
 
@@ -950,7 +948,7 @@ function _VirtualDom_diffKeyedKids(xParent, yParent, patches, rootIndex) {
         yKey,
         yNode,
         yIndex,
-        inserts
+        inserts,
       );
       _VirtualDom_diffHelp(xNode, yNextNode, localPatches, index);
       index += xNode.__descendantsCount || 0;
@@ -985,7 +983,7 @@ function _VirtualDom_diffKeyedKids(xParent, yParent, patches, rootIndex) {
         yKey,
         yNode,
         yIndex,
-        inserts
+        inserts,
       );
       index += xNode.__descendantsCount || 0;
 
@@ -1021,7 +1019,7 @@ function _VirtualDom_diffKeyedKids(xParent, yParent, patches, rootIndex) {
       y.__$key,
       y.__$node,
       undefined,
-      endInserts
+      endInserts,
     );
     yIndex++;
   }
@@ -1045,7 +1043,7 @@ function _VirtualDom_insertNode(
   key,
   vnode,
   yIndex,
-  inserts
+  inserts,
 ) {
   var entry = changes[key];
 
@@ -1087,7 +1085,7 @@ function _VirtualDom_insertNode(
     key + _VirtualDom_POSTFIX,
     vnode,
     yIndex,
-    inserts
+    inserts,
   );
 }
 
@@ -1100,7 +1098,7 @@ function _VirtualDom_removeNode(changes, localPatches, key, vnode, index) {
       localPatches,
       __3_REMOVE,
       index,
-      undefined
+      undefined,
     );
 
     changes[key] = {
@@ -1133,7 +1131,7 @@ function _VirtualDom_removeNode(changes, localPatches, key, vnode, index) {
     localPatches,
     key + _VirtualDom_POSTFIX,
     vnode,
-    index
+    index,
   );
 }
 
@@ -1152,7 +1150,7 @@ function _VirtualDom_addDomNodes(domNode, vNode, patches, eventNode) {
     0,
     0,
     vNode.__descendantsCount,
-    eventNode
+    eventNode,
   );
 }
 
@@ -1164,7 +1162,7 @@ function _VirtualDom_addDomNodesHelp(
   i,
   low,
   high,
-  eventNode
+  eventNode,
 ) {
   var patch = patches[i];
   var index = patch.__index;
@@ -1187,7 +1185,7 @@ function _VirtualDom_addDomNodesHelp(
           0,
           low,
           high,
-          eventNode
+          eventNode,
         );
       }
     } else if (patchType === __3_REMOVE) {
@@ -1206,7 +1204,7 @@ function _VirtualDom_addDomNodesHelp(
             0,
             low,
             high,
-            eventNode
+            eventNode,
           );
         }
       }
@@ -1238,7 +1236,7 @@ function _VirtualDom_addDomNodesHelp(
       i,
       low + 1,
       high,
-      domNode.gren_event_node_ref
+      domNode.gren_event_node_ref,
     );
   }
 
@@ -1258,7 +1256,7 @@ function _VirtualDom_addDomNodesHelp(
         i,
         low,
         nextLow,
-        eventNode
+        eventNode,
       );
       if (!(patch = patches[i]) || (index = patch.__index) > high) {
         return i;
@@ -1275,7 +1273,7 @@ function _VirtualDom_applyPatches(
   rootDomNode,
   oldVirtualNode,
   patches,
-  eventNode
+  eventNode,
 ) {
   if (patches.length === 0) {
     return rootDomNode;
@@ -1303,7 +1301,7 @@ function _VirtualDom_applyPatch(domNode, patch) {
       return _VirtualDom_applyPatchRedraw(
         domNode,
         patch.__data,
-        patch.__eventNode
+        patch.__eventNode,
       );
 
     case __3_FACTS:
@@ -1343,7 +1341,7 @@ function _VirtualDom_applyPatch(domNode, patch) {
       for (; i < kids.length; i++) {
         domNode.insertBefore(
           _VirtualDom_render(kids[i], patch.__eventNode),
-          theEnd
+          theEnd,
         );
       }
       return domNode;
@@ -1392,7 +1390,7 @@ function _VirtualDom_applyPatchReorder(domNode, patch) {
   // remove end inserts
   var frag = _VirtualDom_applyPatchReorderEndInsertsHelp(
     data.__endInserts,
-    patch
+    patch,
   );
 
   // removals
@@ -1431,7 +1429,7 @@ function _VirtualDom_applyPatchReorderEndInsertsHelp(endInserts, patch) {
       frag,
       entry.__tag === __5_MOVE
         ? entry.__data
-        : _VirtualDom_render(entry.__vnode, patch.__eventNode)
+        : _VirtualDom_render(entry.__vnode, patch.__eventNode),
     );
   }
   return frag;
