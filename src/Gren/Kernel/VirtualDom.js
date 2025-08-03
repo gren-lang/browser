@@ -70,7 +70,7 @@ var _VirtualDom_nodeNS = F2(function (namespace, tag) {
 });
 
 var _VirtualDom_node = function (tag) {
-  return _VirtualDom_nodeNS.f(undefined, tag);
+  return A2(_VirtualDom_nodeNS, undefined, tag);
 };
 
 // KEYED NODE
@@ -96,7 +96,7 @@ var _VirtualDom_keyedNodeNS = F2(function (namespace, tag) {
 });
 
 var _VirtualDom_keyedNode = function (tag) {
-  return _VirtualDom_keyedNodeNS.f(undefined, tag);
+  return A2(_VirtualDom_keyedNodeNS, undefined, tag);
 };
 
 // CUSTOM
