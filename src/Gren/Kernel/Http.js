@@ -54,7 +54,8 @@ var _Http_toTask = F3(function (router, toTask, request) {
 function _Http_configureRequest(xhr, request) {
   var headers = request.__$headers;
   for (var i = 0; i < headers.length; i++) {
-    xhr.setRequestHeader(headers[i].a, headers[i].b);
+    var header = headers[i].a;
+    xhr.setRequestHeader(header.__$key, header.__$value);
   }
   xhr.timeout = request.__$timeout.a || 0;
   xhr.responseType = request.__$expect.__type;
