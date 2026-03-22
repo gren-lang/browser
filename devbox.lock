@@ -5,9 +5,53 @@
       "last_modified": "2025-07-16T16:36:02Z",
       "resolved": "github:NixOS/nixpkgs/fa64ec5c1ca6f17746f3defedb988b9248e97616?lastModified=1752683762&narHash=sha256-CVC4bpthYhKk4Qb4mt00SqfJ7CJ4vfTX06pLN2OHa1c%3D"
     },
-    "github:gren-lang/nix/0.6.1": {
-      "last_modified": "2025-07-31T11:19:03Z",
-      "resolved": "github:gren-lang/nix/8d40147d6c3831179186bb0f243871745c2213e7?lastModified=1753960743&narHash=sha256-PhxTNVpRCxNORmZSCgDbGS24yfPIcifplbp%2Bhfeh7Ec%3D"
+    "gren@0.6": {
+      "last_modified": "2026-02-23T15:40:43Z",
+      "resolved": "github:NixOS/nixpkgs/80d901ec0377e19ac3f7bb8c035201e2e098cc97#gren",
+      "source": "devbox-search",
+      "version": "0.6.3",
+      "systems": {
+        "aarch64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/ah5ysp00y57mgks913vyv02n0lnmm63n-gren-0.6.3",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/ah5ysp00y57mgks913vyv02n0lnmm63n-gren-0.6.3"
+        },
+        "aarch64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/4jp8m7l6xnnc17y5rdj9vqi2y1h93rng-gren-0.6.3",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/4jp8m7l6xnnc17y5rdj9vqi2y1h93rng-gren-0.6.3"
+        },
+        "x86_64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/jiasbq1y7l5dirqb4fz1pyvrbwhnz992-gren-0.6.3",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/jiasbq1y7l5dirqb4fz1pyvrbwhnz992-gren-0.6.3"
+        },
+        "x86_64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/45gyi8h54mi4vk435wz41z051b4mp3f5-gren-0.6.3",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/45gyi8h54mi4vk435wz41z051b4mp3f5-gren-0.6.3"
+        }
+      }
     },
     "nodePackages.prettier@latest": {
       "last_modified": "2025-05-21T18:43:04Z",
