@@ -1477,7 +1477,7 @@ function _VirtualDom_dekey(keyedNode) {
   var kids = new Array(len);
 
   for (var i = 0; i < len; i++) {
-    kids[i] = keyedKids[i].b;
+    kids[i] = keyedKids[i].__$node;
   }
 
   return {
