@@ -4,7 +4,7 @@
     "name": "gren-lang/browser",
     "summary": "Run Gren in browsers",
     "license": "BSD-3-Clause",
-    "version": "6.0.2",
+    "version": "6.0.3",
     "exposed-modules": [
         "Browser",
         "Browser.Dom",
